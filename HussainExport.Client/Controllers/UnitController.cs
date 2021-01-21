@@ -17,20 +17,20 @@ using System.Text;
 
 namespace HussainExport.Client.Controllers
 {
-    public class RoleController : Controller
+    public class UnitController : Controller
     {
         private readonly HEClientContext _context;
         APIHelper _helperAPI = new APIHelper();
 
-        public RoleController(HEClientContext context)
+        public UnitController(HEClientContext context)
         {
             _context = context;
         }
 
-        // GET: Role
+        // GET: Unit
         public async Task<IActionResult> Index()
         {
-            List<RoleVM> roleVM = new List<RoleVM>();
+            List<UnitVM> unitVM = new List<UnitVM>();
 
             HttpClient client = _helperAPI.InitializeClient();
 
@@ -39,135 +39,159 @@ namespace HussainExport.Client.Controllers
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
-            HttpResponseMessage roleVMsRes = await client.GetAsync("api/Roles");
+            HttpResponseMessage res = await client.GetAsync("api/Units");
 
-            if (roleVMsRes.StatusCode == HttpStatusCode.Unauthorized)
+            if (res.StatusCode == HttpStatusCode.Unauthorized)
             {
                 ViewBag.Message = "Unauthorized!";
             }
 
             //Checking the response is successful or not which is sent using HttpClient    
-            if (roleVMsRes.IsSuccessStatusCode)
+            if (res.IsSuccessStatusCode)
             {
                 //Storing the response details recieved from web api     
-                var result = roleVMsRes.Content.ReadAsStringAsync().Result;
+                var result = res.Content.ReadAsStringAsync().Result;
 
 
                 //Deserializing the response recieved from web api and storing into the role list    
-                roleVM = JsonConvert.DeserializeObject<List<RoleVM>>(result);
+                unitVM = JsonConvert.DeserializeObject<List<UnitVM>>(result);
 
             }
             //returning the role list to view    
-            return View(roleVM);
+            return View(unitVM);
+            //return View(await _context.UnitVM.ToListAsync());
         }
 
-        // GET: Role/Details/5
-        public async Task<IActionResult> Details(long? id)
+        // GET: Unit/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            RoleVM roleVM = new RoleVM();
-
+            UnitVM unitVM = new UnitVM();
             HttpClient client = _helperAPI.InitializeClient();
-
-            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            client.DefaultRequestHeaders.Accept.Add(contentType);
-
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            HttpResponseMessage res = await client.GetAsync("api/Units/" + id);
 
-            //var content = new StringContent(JsonConvert.SerializeObject(id), Encoding.UTF8, "application/json");
-
-            HttpResponseMessage roleVMRes = await client.GetAsync("api/Roles/"+id);
-
-            if (roleVMRes.StatusCode == HttpStatusCode.Unauthorized)
+            if (res.StatusCode == HttpStatusCode.Unauthorized)
             {
                 ViewBag.Message = "Unauthorized!";
             }
 
             //Checking the response is successful or not which is sent using HttpClient    
-            if (roleVMRes.IsSuccessStatusCode)
+            if (res.IsSuccessStatusCode)
             {
                 //Storing the response details recieved from web api     
-                var result = roleVMRes.Content.ReadAsStringAsync().Result;
+                var result = res.Content.ReadAsStringAsync().Result;
 
 
                 //Deserializing the response recieved from web api and storing into the Role list    
-                roleVM = JsonConvert.DeserializeObject<RoleVM>(result);
+                unitVM = JsonConvert.DeserializeObject<UnitVM>(result);
 
             }
-            if (roleVM == null)
+            if (unitVM == null)
             {
                 return NotFound();
             }
 
-            return View(roleVM);
+            return View(unitVM);
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var unitVM = await _context.UnitVM
+            //    .FirstOrDefaultAsync(m => m.UnitId == id);
+            //if (unitVM == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(unitVM);
         }
 
-        // GET: Role/Create
+        // GET: Unit/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Role/Create
+        // POST: Unit/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,IsActive,DateAdded,DateUpdated")] RoleVM roleVM)
+        public async Task<IActionResult> Create([Bind("UnitId,UnitName,UnitSymbol,Description,IsActive,DateAdded,DateUpdated")] UnitVM unitVM)
         {
             if (ModelState.IsValid)
             {
                 HttpClient client = _helperAPI.InitializeClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-                var content = new StringContent(JsonConvert.SerializeObject(roleVM), Encoding.UTF8, "application/json");
+                var content = new StringContent(JsonConvert.SerializeObject(unitVM), Encoding.UTF8, "application/json");
                 //Task has been cancelled exception occured here, and Api method never hits while debugging
-                HttpResponseMessage res = client.PostAsync("api/Roles", content).Result;
+                HttpResponseMessage res = client.PostAsync("api/Units", content).Result;
                 if (res.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
                 }
             }
-            return View(roleVM);
+            return View(unitVM);
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(unitVM);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(unitVM);
         }
 
-        // GET: Role/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+        // GET: Unit/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            RoleVM roleVM = new RoleVM();
+            UnitVM unitVM = new UnitVM();
             HttpClient client = _helperAPI.InitializeClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-            HttpResponseMessage res = await client.GetAsync("api/roles/"+id);
+            HttpResponseMessage res = await client.GetAsync("api/Units/" + id);
 
             if (res.IsSuccessStatusCode)
             {
                 var result = res.Content.ReadAsStringAsync().Result;
-                roleVM = JsonConvert.DeserializeObject<RoleVM>(result);
+                unitVM = JsonConvert.DeserializeObject<UnitVM>(result);
             }
 
-            if (roleVM == null)
+            if (unitVM == null)
             {
                 return NotFound();
             }
-            return View(roleVM);
+            return View(unitVM);
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var unitVM = await _context.UnitVM.FindAsync(id);
+            //if (unitVM == null)
+            //{
+            //    return NotFound();
+            //}
+            //return View(unitVM);
         }
 
-        // POST: Role/Edit/5
+        // POST: Unit/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,IsActive,DateAdded,DateUpdated")] RoleVM roleVM)
+        public async Task<IActionResult> Edit(int id, [Bind("UnitId,UnitName,UnitSymbol,Description,IsActive,DateAdded,DateUpdated")] UnitVM unitVM)
         {
-            if (id != roleVM.Id)
+            if (id != unitVM.UnitId)
             {
                 return NotFound();
             }
@@ -178,8 +202,8 @@ namespace HussainExport.Client.Controllers
                 {
                     HttpClient client = _helperAPI.InitializeClient();
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-                    var content = new StringContent(JsonConvert.SerializeObject(roleVM), Encoding.UTF8, "application/json");
-                    HttpResponseMessage res = client.PutAsync("api/roles/"+ id, content).Result;
+                    var content = new StringContent(JsonConvert.SerializeObject(unitVM), Encoding.UTF8, "application/json");
+                    HttpResponseMessage res = client.PutAsync("api/Units/" + id, content).Result;
                     if (res.IsSuccessStatusCode)
                     {
                         return RedirectToAction("Index");
@@ -193,78 +217,122 @@ namespace HussainExport.Client.Controllers
                     //}
                     //else
                     //{
-                        throw;
+                    throw;
                     //}
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(roleVM);
+            return View(unitVM);
+            //if (id != unitVM.UnitId)
+            //{
+            //    return NotFound();
+            //}
+
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+            //        _context.Update(unitVM);
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!UnitVMExists(unitVM.UnitId))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(unitVM);
         }
 
-        // GET: Role/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+        // GET: Unit/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            RoleVM roleVM = new RoleVM();
+            UnitVM unitVM = new UnitVM();
             HttpClient client = _helperAPI.InitializeClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-            HttpResponseMessage res = await client.GetAsync("api/roles/" + id);
+            HttpResponseMessage res = await client.GetAsync("api/Units/" + id);
 
             if (res.IsSuccessStatusCode)
             {
                 var result = res.Content.ReadAsStringAsync().Result;
-                roleVM = JsonConvert.DeserializeObject<RoleVM>(result);
+                unitVM = JsonConvert.DeserializeObject<UnitVM>(result);
             }
-            if (roleVM == null)
+            if (unitVM == null)
             {
                 return NotFound();
             }
 
-            return View(roleVM);
+            return View(unitVM);
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var unitVM = await _context.UnitVM
+            //    .FirstOrDefaultAsync(m => m.UnitId == id);
+            //if (unitVM == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(unitVM);
         }
 
-        // POST: Role/Delete/5
+        // POST: Unit/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             HttpClient client = _helperAPI.InitializeClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-            HttpResponseMessage res = client.DeleteAsync($"api/roles/{id}").Result;
+            HttpResponseMessage res = client.DeleteAsync($"api/Units/{id}").Result;
             if (res.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
             return RedirectToAction(nameof(Index));
+            //var unitVM = await _context.UnitVM.FindAsync(id);
+            //_context.UnitVM.Remove(unitVM);
+            //await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> RoleVMExists(long id)
+        private async Task<bool> UnitVMExists(int id)
         {
             if (id == 0)
             {
                 return false;
             }
 
-            RoleVM roleVM = new RoleVM();
+            UnitVM unitVM = new UnitVM();
             HttpClient client = _helperAPI.InitializeClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-            HttpResponseMessage res = await client.GetAsync("api/roles/" + id);
+            HttpResponseMessage res = await client.GetAsync("api/Units/" + id);
 
             if (res.IsSuccessStatusCode)
             {
                 var result = res.Content.ReadAsStringAsync().Result;
-                roleVM = JsonConvert.DeserializeObject<RoleVM>(result);
+                unitVM = JsonConvert.DeserializeObject<UnitVM>(result);
             }
-            if (roleVM == null)
+            if (unitVM == null)
             {
                 return false;
             }
 
             return true;
+            //return _context.UnitVM.Any(e => e.UnitId == id);
         }
     }
 }

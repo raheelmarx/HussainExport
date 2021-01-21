@@ -1,0 +1,207 @@
+﻿@model HussainExport.Client.Models.SaleContractVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>SaleContractVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SaleContractNumber" class="control-label"></label>
+                <input asp-for="SaleContractNumber" class="form-control" />
+                <span asp-validation-for="SaleContractNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label"></label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrencyId" class="control-label"></label>
+                <select asp-for="CurrencyId" class="form-control" asp-items="ViewBag.CurrencyId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeliveryTime" class="control-label"></label>
+                <input asp-for="DeliveryTime" class="form-control" />
+                <span asp-validation-for="DeliveryTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShipmentDetails" class="control-label"></label>
+                <input asp-for="ShipmentDetails" class="form-control" />
+                <span asp-validation-for="ShipmentDetails" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Packing" class="control-label"></label>
+                <input asp-for="Packing" class="form-control" />
+                <span asp-validation-for="Packing" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label"></label>
+                <input asp-for="IsActive" class="form-control" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateAdded" class="control-label"></label>
+                <input asp-for="DateAdded" class="form-control" />
+                <span asp-validation-for="DateAdded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateUpdated" class="control-label"></label>
+                <input asp-for="DateUpdated" class="form-control" />
+                <span asp-validation-for="DateUpdated" class="text-danger"></span>
+            </div>
+
+            <h1>Sale Contract Item</h1>
+            <!-- Button trigger modal -->
+            <button type="button" id="btnAddItem" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Add Sale Contract Item
+            </button>
+            @*<button type="button" >Load Partial View</button>*@
+            <div id="divItem"></div>
+            @*<partial name="_PartialItem" />*@
+           <div id="divItemList"><table id="ItemTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Quality)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Article)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Color)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Size)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Amount)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().DateAdded)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().DateUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().SaleContract)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Unit)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @*  <tbody>
+            @foreach (var item in Model.SaleContractItem)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quality)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Article)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Color)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Size)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateAdded)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SaleContract.SaleContractId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit.UnitId)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.SaleContractItemId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.SaleContractItemId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.SaleContractItemId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>*@
+</table></div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $(document).ready(function () {
+
+        $("#btnAddItem").click(function () {
+            $("#divItem").load("/SaleContract/AddItem?handler=Partial");
+        });
+
+
+      
+        //function addItem() {
+        //    debugger;
+        //    $.ajax({
+        //        url: "SaleContract/AddItem",
+        //        cache: false,
+        //        success: function (html) {
+        //            alert("Yes");
+        //            //$("#results").append(html);
+        //        }
+        //    });
+
+        //}
+
+    });
+
+</script>

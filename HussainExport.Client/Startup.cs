@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HussainExport.Client.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace HussainExport.Client
 {
@@ -38,6 +39,10 @@ namespace HussainExport.Client
             services.AddDbContext<HEClientContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("HEClientContext")));
             services.AddMvc();
+            services.AddMemoryCache();
+            services.AddSession();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -15,5 +15,15 @@ namespace HussainExport.Client.Data
         }
 
         public DbSet<HussainExport.Client.Models.RoleVM> RoleVM { get; set; }
+
+        public DbSet<HussainExport.Client.Models.SaleContractVM> SaleContractVM { get; set; }
+
+        public DbSet<HussainExport.Client.Models.CurrencyVM> CurrencyVM { get; set; }
+
+        public DbSet<HussainExport.Client.Models.CustomerVM> CustomerVM { get; set; }
+
+        public DbSet<HussainExport.Client.Models.UnitVM> UnitVM { get; set; }
+
+        public DbSet<HussainExport.Client.Models.SaleContractItemVM> SaleContractItemVM { get; set; }
     }
 }

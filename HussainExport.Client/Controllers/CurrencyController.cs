@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,24 +12,25 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 using System.Text;
 
 namespace HussainExport.Client.Controllers
 {
-    public class RoleController : Controller
+    public class CurrencyController : Controller
     {
         private readonly HEClientContext _context;
         APIHelper _helperAPI = new APIHelper();
 
-        public RoleController(HEClientContext context)
+        public CurrencyController(HEClientContext context)
         {
             _context = context;
         }
 
-        // GET: Role
+        // GET: Currency
         public async Task<IActionResult> Index()
         {
-            List<RoleVM> roleVM = new List<RoleVM>();
+            List<CurrencyVM> CurrencyVM = new List<CurrencyVM>();
 
             HttpClient client = _helperAPI.InitializeClient();
 
@@ -39,37 +39,38 @@ namespace HussainExport.Client.Controllers
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
-            HttpResponseMessage roleVMsRes = await client.GetAsync("api/Roles");
+            HttpResponseMessage CurrencyVMsRes = await client.GetAsync("api/Currencies");
 
-            if (roleVMsRes.StatusCode == HttpStatusCode.Unauthorized)
+            if (CurrencyVMsRes.StatusCode == HttpStatusCode.Unauthorized)
             {
                 ViewBag.Message = "Unauthorized!";
             }
 
             //Checking the response is successful or not which is sent using HttpClient    
-            if (roleVMsRes.IsSuccessStatusCode)
+            if (CurrencyVMsRes.IsSuccessStatusCode)
             {
                 //Storing the response details recieved from web api     
-                var result = roleVMsRes.Content.ReadAsStringAsync().Result;
+                var result = CurrencyVMsRes.Content.ReadAsStringAsync().Result;
 
 
                 //Deserializing the response recieved from web api and storing into the role list    
-                roleVM = JsonConvert.DeserializeObject<List<RoleVM>>(result);
+                CurrencyVM = JsonConvert.DeserializeObject<List<CurrencyVM>>(result);
 
             }
             //returning the role list to view    
-            return View(roleVM);
+            return View(CurrencyVM);
+            //return View(await _context.CurrencyVM.ToListAsync());
         }
 
-        // GET: Role/Details/5
-        public async Task<IActionResult> Details(long? id)
+        // GET: Currency/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            RoleVM roleVM = new RoleVM();
+            CurrencyVM currencyVM = new CurrencyVM();
 
             HttpClient client = _helperAPI.InitializeClient();
 
@@ -80,94 +81,125 @@ namespace HussainExport.Client.Controllers
 
             //var content = new StringContent(JsonConvert.SerializeObject(id), Encoding.UTF8, "application/json");
 
-            HttpResponseMessage roleVMRes = await client.GetAsync("api/Roles/"+id);
+            HttpResponseMessage currencyVMRes = await client.GetAsync("api/Currencies/" + id);
 
-            if (roleVMRes.StatusCode == HttpStatusCode.Unauthorized)
+            if (currencyVMRes.StatusCode == HttpStatusCode.Unauthorized)
             {
                 ViewBag.Message = "Unauthorized!";
             }
 
             //Checking the response is successful or not which is sent using HttpClient    
-            if (roleVMRes.IsSuccessStatusCode)
+            if (currencyVMRes.IsSuccessStatusCode)
             {
                 //Storing the response details recieved from web api     
-                var result = roleVMRes.Content.ReadAsStringAsync().Result;
+                var result = currencyVMRes.Content.ReadAsStringAsync().Result;
 
 
                 //Deserializing the response recieved from web api and storing into the Role list    
-                roleVM = JsonConvert.DeserializeObject<RoleVM>(result);
+                currencyVM = JsonConvert.DeserializeObject<CurrencyVM>(result);
 
             }
-            if (roleVM == null)
+            if (currencyVM == null)
             {
                 return NotFound();
             }
 
-            return View(roleVM);
+            return View(currencyVM);
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var currencyVM = await _context.CurrencyVM
+            //    .FirstOrDefaultAsync(m => m.CurrencyId == id);
+            //if (currencyVM == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(currencyVM);
         }
 
-        // GET: Role/Create
+        // GET: Currency/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Role/Create
+        // POST: Currency/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,IsActive,DateAdded,DateUpdated")] RoleVM roleVM)
+        public async Task<IActionResult> Create([Bind("CurrencyId,CurrencyName,CurrencySymbol,Description,IsActive,DateAdded,DateUpdated")] CurrencyVM currencyVM)
         {
             if (ModelState.IsValid)
             {
                 HttpClient client = _helperAPI.InitializeClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-                var content = new StringContent(JsonConvert.SerializeObject(roleVM), Encoding.UTF8, "application/json");
+                var content = new StringContent(JsonConvert.SerializeObject(currencyVM), Encoding.UTF8, "application/json");
                 //Task has been cancelled exception occured here, and Api method never hits while debugging
-                HttpResponseMessage res = client.PostAsync("api/Roles", content).Result;
+                HttpResponseMessage res = client.PostAsync("api/Currencies", content).Result;
                 if (res.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
                 }
             }
-            return View(roleVM);
+            return View(currencyVM);
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(currencyVM);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(currencyVM);
         }
 
-        // GET: Role/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+        // GET: Currency/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            RoleVM roleVM = new RoleVM();
+            CurrencyVM currencyVM = new CurrencyVM();
             HttpClient client = _helperAPI.InitializeClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-            HttpResponseMessage res = await client.GetAsync("api/roles/"+id);
+            HttpResponseMessage res = await client.GetAsync("api/Currencies/" + id);
 
             if (res.IsSuccessStatusCode)
             {
                 var result = res.Content.ReadAsStringAsync().Result;
-                roleVM = JsonConvert.DeserializeObject<RoleVM>(result);
+                currencyVM = JsonConvert.DeserializeObject<CurrencyVM>(result);
             }
 
-            if (roleVM == null)
+            if (currencyVM == null)
             {
                 return NotFound();
             }
-            return View(roleVM);
+            return View(currencyVM);
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var currencyVM = await _context.CurrencyVM.FindAsync(id);
+            //if (currencyVM == null)
+            //{
+            //    return NotFound();
+            //}
+            //return View(currencyVM);
         }
 
-        // POST: Role/Edit/5
+        // POST: Currency/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,IsActive,DateAdded,DateUpdated")] RoleVM roleVM)
+        public async Task<IActionResult> Edit(int id, [Bind("CurrencyId,CurrencyName,CurrencySymbol,Description,IsActive,DateAdded,DateUpdated")] CurrencyVM currencyVM)
         {
-            if (id != roleVM.Id)
+            if (id != currencyVM.CurrencyId)
             {
                 return NotFound();
             }
@@ -178,8 +210,8 @@ namespace HussainExport.Client.Controllers
                 {
                     HttpClient client = _helperAPI.InitializeClient();
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-                    var content = new StringContent(JsonConvert.SerializeObject(roleVM), Encoding.UTF8, "application/json");
-                    HttpResponseMessage res = client.PutAsync("api/roles/"+ id, content).Result;
+                    var content = new StringContent(JsonConvert.SerializeObject(currencyVM), Encoding.UTF8, "application/json");
+                    HttpResponseMessage res = await client.PutAsync("api/Currencies/" + id, content);
                     if (res.IsSuccessStatusCode)
                     {
                         return RedirectToAction("Index");
@@ -193,78 +225,122 @@ namespace HussainExport.Client.Controllers
                     //}
                     //else
                     //{
-                        throw;
+                    throw;
                     //}
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(roleVM);
+            return View(currencyVM);
+            //if (id != currencyVM.CurrencyId)
+            //{
+            //    return NotFound();
+            //}
+
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+            //        _context.Update(currencyVM);
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!CurrencyVMExists(currencyVM.CurrencyId))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //return View(currencyVM);
         }
 
-        // GET: Role/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+        // GET: Currency/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            RoleVM roleVM = new RoleVM();
+            CurrencyVM currencyVM = new CurrencyVM();
             HttpClient client = _helperAPI.InitializeClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-            HttpResponseMessage res = await client.GetAsync("api/roles/" + id);
+            HttpResponseMessage res = await client.GetAsync("api/Currencies/" + id);
 
             if (res.IsSuccessStatusCode)
             {
                 var result = res.Content.ReadAsStringAsync().Result;
-                roleVM = JsonConvert.DeserializeObject<RoleVM>(result);
+                currencyVM = JsonConvert.DeserializeObject<CurrencyVM>(result);
             }
-            if (roleVM == null)
+            if (currencyVM == null)
             {
                 return NotFound();
             }
 
-            return View(roleVM);
+            return View(currencyVM);
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var currencyVM = await _context.CurrencyVM
+            //    .FirstOrDefaultAsync(m => m.CurrencyId == id);
+            //if (currencyVM == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(currencyVM);
         }
 
-        // POST: Role/Delete/5
+        // POST: Currency/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             HttpClient client = _helperAPI.InitializeClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-            HttpResponseMessage res = client.DeleteAsync($"api/roles/{id}").Result;
+            HttpResponseMessage res =  client.DeleteAsync($"api/Currencies/{id}").Result;
             if (res.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
             return RedirectToAction(nameof(Index));
+            //var currencyVM = await _context.CurrencyVM.FindAsync(id);
+            //_context.CurrencyVM.Remove(currencyVM);
+            //await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> RoleVMExists(long id)
+        private async Task<bool> CurrencyVMExists(int id)
         {
             if (id == 0)
             {
                 return false;
             }
 
-            RoleVM roleVM = new RoleVM();
+            CurrencyVM currencyVM = new CurrencyVM();
             HttpClient client = _helperAPI.InitializeClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
-            HttpResponseMessage res = await client.GetAsync("api/roles/" + id);
+            HttpResponseMessage res = await client.GetAsync("api/Currencies/" + id);
 
             if (res.IsSuccessStatusCode)
             {
                 var result = res.Content.ReadAsStringAsync().Result;
-                roleVM = JsonConvert.DeserializeObject<RoleVM>(result);
+                currencyVM = JsonConvert.DeserializeObject<CurrencyVM>(result);
             }
-            if (roleVM == null)
+            if (currencyVM == null)
             {
                 return false;
             }
 
             return true;
+            //return _context.CurrencyVM.Any(e => e.CurrencyId == id);
         }
     }
 }
