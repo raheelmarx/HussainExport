@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HussainExport.Client.Data;
 using Microsoft.AspNetCore.Http;
+using HussainExport.Client.Helpers;
 
 namespace HussainExport.Client
 {
@@ -43,6 +44,14 @@ namespace HussainExport.Client
             services.AddSession();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            services.AddScoped<AuthorizeAttribute>();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,9 +72,9 @@ namespace HussainExport.Client
             app.UseCookiePolicy();
 
             app.UseRouting();
-
-            app.UseAuthorization();
             app.UseSession();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,4 +1,5 @@
-﻿using HussainExport.Client.Models;
+﻿using HussainExport.Client.Helpers;
+using HussainExport.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace HussainExport.Client.Controllers
 {
+    [ServiceFilter(typeof(AuthorizeAttribute))]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -17,11 +17,13 @@ namespace HussainExport.Client.Controllers
     public class UserController : Controller
     {
         APIHelper _helperAPI = new APIHelper();
+
         [HttpGet]
         public IActionResult SignIn()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> SignIn(AuthenticateVM authenticateVM)
         {
@@ -52,8 +54,10 @@ namespace HussainExport.Client.Controllers
 
             }
             //returning the employee list to view    
-            return RedirectToAction("Welcome");
+            return RedirectToAction("Index", "Home");
         }
+
+        [ServiceFilter(typeof(AuthorizeAttribute))]
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("token");
@@ -68,6 +72,7 @@ namespace HussainExport.Client.Controllers
             return View();
         }
 
+        [ServiceFilter(typeof(AuthorizeAttribute))]
         public async Task<IActionResult> Create()
         {
             HttpClient client = _helperAPI.InitializeClient();
@@ -99,6 +104,7 @@ namespace HussainExport.Client.Controllers
             return View();
         }
         // POST: AspNetRoles/Create  
+        [ServiceFilter(typeof(AuthorizeAttribute))]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FirstName,LastName,UserName,Password,RoleId")] UserVM UserVM)
@@ -119,7 +125,7 @@ namespace HussainExport.Client.Controllers
             return View(UserVM);
         }
 
-
+        [ServiceFilter(typeof(AuthorizeAttribute))]
         public async Task<IActionResult> GetAll()
         {
             List<UserVM> UserVMs = new List<UserVM>();

@@ -17,6 +17,7 @@ using System.Text;
 
 namespace HussainExport.Client.Controllers
 {
+    [ServiceFilter(typeof(AuthorizeAttribute))]
     public class CurrencyController : Controller
     {
         private readonly HEClientContext _context;

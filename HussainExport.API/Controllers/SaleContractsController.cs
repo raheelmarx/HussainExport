@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HussainExport.API.Entities;
+using HussainExport.API.Helpers;
 
 namespace HussainExport.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SaleContractsController : ControllerBase

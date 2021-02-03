@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HussainExport.Client.Controllers
 {
+    [ServiceFilter(typeof(AuthorizeAttribute))]
     public class SaleContractController : Controller
     {
         private readonly HEClientContext _context;
@@ -336,7 +337,7 @@ namespace HussainExport.Client.Controllers
             if (resCust.IsSuccessStatusCode)
             {
                 //Storing the response details recieved from web api     
-                var result = res.Content.ReadAsStringAsync().Result;
+                var result = resCust.Content.ReadAsStringAsync().Result;
 
 
                 //Deserializing the response recieved from web api and storing into the role list    

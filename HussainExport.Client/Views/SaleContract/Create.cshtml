@@ -1,122 +1,146 @@
 ﻿@model HussainExport.Client.Models.SaleContractVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "New Sale Contract";
 }
 
-<h1>Create</h1>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"> @ViewData["Title"]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
 
-<h4>SaleContractVM</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="SaleContractNumber" class="control-label"></label>
-                <input asp-for="SaleContractNumber" class="form-control" />
-                <span asp-validation-for="SaleContractNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CustomerId" class="control-label"></label>
-                <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="TotalAmount" class="control-label"></label>
-                <input asp-for="TotalAmount" class="form-control" />
-                <span asp-validation-for="TotalAmount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CurrencyId" class="control-label"></label>
-                <select asp-for="CurrencyId" class="form-control" asp-items="ViewBag.CurrencyId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeliveryTime" class="control-label"></label>
-                <input asp-for="DeliveryTime" class="form-control" />
-                <span asp-validation-for="DeliveryTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShipmentDetails" class="control-label"></label>
-                <input asp-for="ShipmentDetails" class="form-control" />
-                <span asp-validation-for="ShipmentDetails" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Packing" class="control-label"></label>
-                <input asp-for="Packing" class="form-control" />
-                <span asp-validation-for="Packing" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsActive" class="control-label"></label>
-                <input asp-for="IsActive" class="form-control" />
-                <span asp-validation-for="IsActive" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateAdded" class="control-label"></label>
-                <input asp-for="DateAdded" class="form-control" />
-                <span asp-validation-for="DateAdded" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateUpdated" class="control-label"></label>
-                <input asp-for="DateUpdated" class="form-control" />
-                <span asp-validation-for="DateUpdated" class="text-danger"></span>
-            </div>
+        <div class="row">
+            <div class="col-12">
 
-            <h1>Sale Contract Item</h1>
-            <!-- Button trigger modal -->
-            <button type="button" id="btnAddItem" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Add Sale Contract Item
-            </button>
-            @*<button type="button" >Load Partial View</button>*@
-            <div id="divItem"></div>
-            @*<partial name="_PartialItem" />*@
-           <div id="divItemList"><table id="ItemTable" class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Quality)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Article)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Amount)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().DateAdded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().DateUpdated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().SaleContract)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Unit)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    @*  <tbody>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form asp-action="Create">
+                            <div class="row">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="SaleContractNumber" class="control-label"></label>
+                                        <input asp-for="SaleContractNumber" class="form-control" />
+                                        <span asp-validation-for="SaleContractNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="CustomerId" class="control-label"></label>
+                                        <select asp-for="CustomerId" class="form-control select2bs4" style="width: 100%;" asp-items="ViewBag.CustomerId"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="TotalAmount" class="control-label"></label>
+                                        <input asp-for="TotalAmount" class="form-control" />
+                                        <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="CurrencyId" class="control-label"></label>
+                                        <select asp-for="CurrencyId" class="form-control select2bs4" style="width: 100%;" asp-items="ViewBag.CurrencyId"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="DeliveryTime" class="control-label"></label>
+                                        <input asp-for="DeliveryTime" class="form-control" />
+                                        <span asp-validation-for="DeliveryTime" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ShipmentDetails" class="control-label"></label>
+                                        <input asp-for="ShipmentDetails" class="form-control" />
+                                        <span asp-validation-for="ShipmentDetails" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Packing" class="control-label"></label>
+                                        <input asp-for="Packing" class="form-control" />
+                                        <span asp-validation-for="Packing" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Description" class="control-label"></label>
+                                        <input asp-for="Description" class="form-control" />
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            @*<div class="form-group">
+            <label asp-for="IsActive" class="control-label"></label>
+            <input asp-for="IsActive" class="form-control" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateAdded" class="control-label"></label>
+            <input asp-for="DateAdded" class="form-control" />
+            <span asp-validation-for="DateAdded" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateUpdated" class="control-label"></label>
+            <input asp-for="DateUpdated" class="form-control" />
+            <span asp-validation-for="DateUpdated" class="text-danger"></span>
+        </div>*@
+
+
+                            <!-- Button trigger modal -->
+                            @*<button type="button" id="btnAddItem" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Add Sale Contract Item
+        </button>*@
+                            @*<button type="button" >Load Partial View</button>*@
+                            @*<div id="divItem">  <h1>Sale Contract Item</h1></div>*@
+                            @*<partial name="_PartialItem" />*@
+                            @*<div id="divItemList" ><table id="ItemTable" class="table">*@
+                            @*<thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Quality)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Article)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Color)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Size)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Amount)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.SaleContractItem.FirstOrDefault().Unit)
+                </th>
+                <th></th>
+            </tr>
+        </thead>*@
+                            @*  <tbody>
             @foreach (var item in Model.SaleContractItem)
             {
                 <tr>
@@ -164,44 +188,193 @@
                 </tr>
             }
         </tbody>*@
-</table></div>
+                            @*</table></div>*@
 
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="float-sm-right">
+                            <p>
+                                <a asp-action="Index" class="btn btn-block btn-primary">Back to List</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
     </div>
-</form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<!-- Page specific script -->
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-<script>
-    $(document).ready(function () {
+@*<script>
+        $(document).ready(function () {
 
-        $("#btnAddItem").click(function () {
-            $("#divItem").load("/SaleContract/AddItem?handler=Partial");
+            $("#divItemList").hide();
+            $("#divItem").hide();
+
+            $("#btnAddItem").click(function () {
+                $("#divItem").show();
+                $("#divItem").load("/SaleContract/AddItem?handler=Partial");
+            });
+
+
+
+            //function addItem() {
+            //    debugger;
+            //    $.ajax({
+            //        url: "SaleContract/AddItem",
+            //        cache: false,
+            //        success: function (html) {
+            //            alert("Yes");
+            //            //$("#results").append(html);
+            //        }
+            //    });
+
+            //}
+
         });
 
+    </script>*@
+<!-- Page specific script -->
+<script>
+    $(function () {
+        //Initialize Select2 Elements
+        $('.select2').select2()
 
-      
-        //function addItem() {
-        //    debugger;
-        //    $.ajax({
-        //        url: "SaleContract/AddItem",
-        //        cache: false,
-        //        success: function (html) {
-        //            alert("Yes");
-        //            //$("#results").append(html);
-        //        }
-        //    });
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
 
-        //}
+        //Datemask dd/mm/yyyy
+        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+        //Datemask2 mm/dd/yyyy
+        $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+        //Money Euro
+        $('[data-mask]').inputmask()
 
-    });
+        //Date range picker
+        $('#reservationdate').datetimepicker({
+            format: 'L'
+        });
+        //Date range picker
+        $('#reservation').daterangepicker()
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'MM/DD/YYYY hh:mm A'
+            }
+        })
+        //Date range as a button
+        $('#daterange-btn').daterangepicker(
+            {
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                startDate: moment().subtract(29, 'days'),
+                endDate: moment()
+            },
+            function (start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            }
+        )
 
+        //Timepicker
+        $('#timepicker').datetimepicker({
+            format: 'LT'
+        })
+
+        //Bootstrap Duallistbox
+        $('.duallistbox').bootstrapDualListbox()
+
+        //Colorpicker
+        $('.my-colorpicker1').colorpicker()
+        //color picker with addon
+        $('.my-colorpicker2').colorpicker()
+
+        $('.my-colorpicker2').on('colorpickerChange', function (event) {
+            $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+        })
+
+        $("input[data-bootstrap-switch]").each(function () {
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        })
+
+    })
+    // BS-Stepper Init
+    document.addEventListener('DOMContentLoaded', function () {
+        window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+    })
+
+    // DropzoneJS Demo Code Start
+    Dropzone.autoDiscover = false
+
+    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+    var previewNode = document.querySelector("#template")
+    previewNode.id = ""
+    var previewTemplate = previewNode.parentNode.innerHTML
+    previewNode.parentNode.removeChild(previewNode)
+
+    var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        url: "/target-url", // Set the url
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        parallelUploads: 20,
+        previewTemplate: previewTemplate,
+        autoQueue: false, // Make sure the files aren't queued until manually added
+        previewsContainer: "#previews", // Define the container to display the previews
+        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+    })
+
+    myDropzone.on("addedfile", function (file) {
+        // Hookup the start button
+        file.previewElement.querySelector(".start").onclick = function () { myDropzone.enqueueFile(file) }
+    })
+
+    // Update the total progress bar
+    myDropzone.on("totaluploadprogress", function (progress) {
+        document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
+    })
+
+    myDropzone.on("sending", function (file) {
+        // Show the total progress bar when upload starts
+        document.querySelector("#total-progress").style.opacity = "1"
+        // And disable the start button
+        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
+    })
+
+    // Hide the total progress bar when nothing's uploading anymore
+    myDropzone.on("queuecomplete", function (progress) {
+        document.querySelector("#total-progress").style.opacity = "0"
+    })
+
+    // Setup the buttons for all transfers
+    // The "add files" button doesn't need to be setup because the config
+    // `clickable` has already been specified.
+    document.querySelector("#actions .start").onclick = function () {
+        myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
+    }
+    document.querySelector("#actions .cancel").onclick = function () {
+        myDropzone.removeAllFiles(true)
+    }
+  // DropzoneJS Demo Code End
 </script>
