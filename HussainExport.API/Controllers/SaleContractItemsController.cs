@@ -22,9 +22,12 @@ namespace HussainExport.API.Controllers
 
         // GET: api/SaleContractItems
         [HttpGet]
+        //public async Task<ActionResult<IEnumerable<SaleContractItem>>> GetSaleContractItem()
         public async Task<ActionResult<IEnumerable<SaleContractItem>>> GetSaleContractItem()
         {
             return await _context.SaleContractItem.ToListAsync();
+           //var data =   _context.SaleContractItem.Include(x => x.SaleContract).ToList();
+           // return data;
         }
 
         // GET: api/SaleContractItems/5
@@ -41,6 +44,21 @@ namespace HussainExport.API.Controllers
             return saleContractItem;
         }
 
+
+        // GET: api/SaleContractItems/5
+        [HttpGet("GetSaleContractItemBySaleContractId/{id}")]
+        public async Task<ActionResult<IEnumerable<SaleContractItem>>> GetSaleContractItemBySaleContractId(long id)
+        {
+            var saleContractItems = await _context.SaleContractItem.Where(x => x.SaleContractId == id).ToListAsync();
+
+            if (saleContractItems == null)
+            {
+                return NotFound();
+            }
+
+            return saleContractItems;
+        }
+
         // PUT: api/SaleContractItems/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -51,6 +69,15 @@ namespace HussainExport.API.Controllers
             {
                 return BadRequest();
             }
+
+            var allSaleContractItems = _context.SaleContractItem.Where(x => x.SaleContractId == saleContractItem.SaleContractId).ToList();
+            var saleContract = await _context.SaleContract.FindAsync(saleContractItem.SaleContractId);
+            saleContract.TotalAmount = 0;
+            foreach ( var item in allSaleContractItems)
+            {
+                saleContract.TotalAmount = saleContract.TotalAmount + item.Amount;
+            }
+            _context.Entry(saleContract).State = EntityState.Modified;
 
             _context.Entry(saleContractItem).State = EntityState.Modified;
 
@@ -79,10 +106,51 @@ namespace HussainExport.API.Controllers
         [HttpPost]
         public async Task<ActionResult<SaleContractItem>> PostSaleContractItem(SaleContractItem saleContractItem)
         {
-            _context.SaleContractItem.Add(saleContractItem);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.SaleContractItem.Add(saleContractItem);
+                // Add/Update Sale Contract Total Amount
+                var saleContract = await _context.SaleContract.FindAsync(saleContractItem.SaleContractId);
+                saleContract.TotalAmount = saleContract.TotalAmount + saleContractItem.Amount;
+                _context.Entry(saleContract).State = EntityState.Modified;
 
-            return CreatedAtAction("GetSaleContractItem", new { id = saleContractItem.SaleContractItemId }, saleContractItem);
+                // Get Receivable and Add Credit Entry in Account
+                var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId).FirstOrDefault();
+                if(receivableExist==null)
+                {
+                    var customer = await _context.Customer.FindAsync(saleContract.CustomerId);
+
+                    receivableExist = new Receivable();
+                    receivableExist.ReceivableName = saleContract.Customer.CustomerName;
+                    receivableExist.ReceivablePhone = saleContract.Customer.Contact;
+                    receivableExist.ReceivableAddress = saleContract.Customer.Address;
+                    receivableExist.ReceivableDescription = saleContract.Customer.CustomerDescription;
+                    receivableExist.Customer = saleContract.Customer;
+                    receivableExist.CustomerId = saleContract.CustomerId;
+                    receivableExist.DateAdded = DateTime.Now;
+                    receivableExist.IsActive = true;
+
+                    _context.Receivable.Add(receivableExist);
+                }
+
+                var tblAccountReceivable = _context.TblAccount.Where(x => x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
+
+                var tblAccountSaleContract = _context.TblAccount.Where(x => x.PayableId == saleContractItem.SaleContractId && x.AccountCode == saleContract.SaleContractNumber ).FirstOrDefault();
+                // Add Double Entry of Receivable (DR) and Sale Contract Account (CR) => Update only Amount Debit and Credit
+                var accountTransaction = _context.AccountTransaction.Where(x => x.AccountDebitId == tblAccountReceivable.AccountId && x.AccountCreditId == tblAccountSaleContract.AccountId).FirstOrDefault();
+                accountTransaction.AmountDebit = saleContract.TotalAmount;
+                accountTransaction.AmountCredit = saleContract.TotalAmount;
+
+                _context.Entry(saleContract).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetSaleContractItem", new { id = saleContractItem.SaleContractItemId }, saleContractItem);
+            }
+            catch (Exception ex)
+            {
+                return CreatedAtAction("GetSaleContractItem", new { id = saleContractItem.SaleContractItemId }, saleContractItem);
+            }
         }
 
         // DELETE: api/SaleContractItems/5

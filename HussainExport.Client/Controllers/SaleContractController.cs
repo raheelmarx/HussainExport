@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HussainExport.Client.Controllers
 {
-    [ServiceFilter(typeof(AuthorizeAttribute))]
+    //[ServiceFilter(typeof(AuthorizeAttribute))]
     public class SaleContractController : Controller
     {
         private readonly HEClientContext _context;
@@ -98,7 +98,132 @@ namespace HussainExport.Client.Controllers
             {
                 return NotFound();
             }
+            #region   Get Sale Contract Items
+            List<SaleContractItemVM> saleContractItemVM = new List<SaleContractItemVM>();
 
+       
+
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+            HttpResponseMessage res1 = await client.GetAsync("api/SaleContractItems/GetSaleContractItemBySaleContractId/" + id);
+
+            if (res1.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (res1.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = res1.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the role list    
+                saleContractItemVM = JsonConvert.DeserializeObject<List<SaleContractItemVM>>(result);
+                foreach( var item in saleContractItemVM)
+                {
+                    #region Unit
+                    UnitVM unitVM = new UnitVM();
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                    HttpResponseMessage resUnit = await client.GetAsync("api/Units/" + item.UnitId);
+
+                    if (resUnit.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ViewBag.Message = "Unauthorized!";
+                    }
+
+                    //Checking the response is successful or not which is sent using HttpClient    
+                    if (resUnit.IsSuccessStatusCode)
+                    {
+                        //Storing the response details recieved from web api     
+                        var resultUnit = resUnit.Content.ReadAsStringAsync().Result;
+
+
+                        //Deserializing the response recieved from web api and storing into the Role list    
+                        unitVM = JsonConvert.DeserializeObject<UnitVM>(resultUnit);
+
+                        item.Unit = unitVM;
+                    }
+                    if (unitVM == null)
+                    {
+                        return NotFound();
+                    }
+
+                    #endregion
+                }
+
+            }
+            //returning the role list to view 
+            #endregion
+
+            saleContractVM.SaleContractItem = saleContractItemVM;
+            #region Customer Information
+            
+            CustomerVM customerVM = new CustomerVM();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            HttpResponseMessage res2 = await client.GetAsync("api/Customers/" + saleContractVM.CustomerId);
+
+            if (res2.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (res2.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = res2.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the Role list    
+                customerVM = JsonConvert.DeserializeObject<CustomerVM>(result);
+
+            }
+            if (customerVM == null)
+            {
+                return NotFound();
+            }
+            saleContractVM.Customer = customerVM;
+            #endregion
+
+            #region Currency
+            CurrencyVM currencyVM = new CurrencyVM();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+            //var content = new StringContent(JsonConvert.SerializeObject(id), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage currencyVMRes = await client.GetAsync("api/Currencies/" + saleContractVM.CurrencyId);
+
+            if (currencyVMRes.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (currencyVMRes.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = currencyVMRes.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the Role list    
+                currencyVM = JsonConvert.DeserializeObject<CurrencyVM>(result);
+
+            }
+            if (currencyVM == null)
+            {
+                return NotFound();
+            }
+
+            saleContractVM.Currency = currencyVM;
+            #endregion
+
+            
             return View(saleContractVM);
             //if (id == null)
             //{

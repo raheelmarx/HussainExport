@@ -16,7 +16,7 @@ namespace HussainExport.Client.Models
         public long SaleContractId { get; set; }
         public string SaleContractNumber { get; set; }
         public long? CustomerId { get; set; }
-        public long? TotalAmount { get; set; }
+        public decimal? TotalAmount { get; set; }
         public int? CurrencyId { get; set; }
         public string DeliveryTime { get; set; }
         public string ShipmentDetails { get; set; }

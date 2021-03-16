@@ -22,7 +22,7 @@
 </div>
 <!-- /.content-header -->
 <!-- Main content -->
-<section class="content">
+<section class="content" id="content">
     <div class="container-fluid">
 
         <div class="row">
@@ -34,66 +34,178 @@
                         <h3 class="card-title">@ViewData["Title"]</h3>
 
                     </div>
+
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <dl class="row">
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.SaleContractNumber)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.SaleContractNumber)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.TotalAmount)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.TotalAmount)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.DeliveryTime)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.DeliveryTime)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.ShipmentDetails)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.ShipmentDetails)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Packing)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Packing)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Description)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Description)
-                            </dd>
-                          
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Currency)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Currency.CurrencyId)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Customer)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Customer.CustomerId)
-                            </dd>
-                        </dl>
+                        <div>
+
+                            @Html.DisplayFor(model => model.SaleContractNumber)<br />
+                            @DateTime.Now
+                        </div>
+                        <br />
+                        <br />
+                        <div>
+                            <h4 class="card-title">Customer Name and Address</h4><br />
+                            @Html.DisplayFor(model => model.Customer.CustomerName)<br />
+                            @Html.DisplayFor(model => model.Customer.Address)
+                        </div>
+                        <div>
+                            <br />
+                            <p>Through negotiation, Party A and Party B enter into this contract, whereby Party B agrees to buy goods listed below on the A terms and conditions stipulated below. This contract should be executed in two counterparts with each of the parties hereto holding one. The Copies delivered through telefax/email shall be as valid as original. This contract must be signed and stamped back to us within 3 working days.</p>
+                        </div>
+                        @*<dl class="row">
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.SaleContractNumber)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.SaleContractNumber)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.TotalAmount)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.TotalAmount)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.DeliveryTime)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.DeliveryTime)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.ShipmentDetails)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.ShipmentDetails)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.Packing)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.Packing)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.Description)
+                                </dd>
+
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.Currency)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.Currency.CurrencyId)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => model.Customer)
+                                </dt>
+                                <dd class="col-sm-10">
+                                    @Html.DisplayFor(model => model.Customer.CustomerName)
+                                </dd>
+                            </dl>*@
+
+
+                        <table id="example1" class="table table-bordered table-striped">
+
+                            <thead>
+                                <tr role="row">
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.SaleContractId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Quality)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Article)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Color)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Size)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Price)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Quantity)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Amount)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Unit)
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model.SaleContractItem)
+                                {
+
+                                    <tr>
+                                        <td>
+                                            @*@Html.Encode(group.Key)*@
+                                            @Html.DisplayFor(modelItem => item.SaleContract.SaleContractNumber)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Quality)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Article)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Color)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Size)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Price)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Quantity)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Amount)
+                                        </td>
+
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Unit.UnitName)
+                                        </td>
+
+                                    </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+
+                        <div>
+                            Tolerance: 10% +/- must be allowed in Quantity & Quality Specification. 3% +/- Yarn & Density Allow
+                        </div>
+                        <div>
+                            @Html.DisplayNameFor(model => model.Packing):  @Html.DisplayFor(model => model.Packing)
+                        </div>
+                        <div>
+                            @Html.DisplayNameFor(model => model.ShipmentDetails):  @Html.DisplayFor(model => model.ShipmentDetails)
+                        </div>
+                        <div>
+                            Bank Details:  Account No. 0665-0010063938330017 in the name of M/S; HUSSAIN EXPORTS. Allied Bank Ltd., Pakistan. Swift Code: ABPAPKKAXXX
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <div class="float-sm-right">
                             <p>
-                                <a asp-action="Edit"  class="btn btn-block btn-primary" asp-route-id="@Model.SaleContractId">Edit</a> 
+                                <a asp-action="Edit" class="btn btn-block btn-primary" asp-route-id="@Model.SaleContractId">Edit</a>
                                 <a asp-action="Index" class="btn btn-block btn-primary">Back to List</a>
+                                <button class="btn btn-block btn-primary" id="cmd">generate PDF</button>
                             </p>
                         </div>
                     </div>
@@ -107,3 +219,36 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+<script>
+    var doc = new jsPDF();
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+    };
+
+    $('#cmd').click(function () {
+        doc.fromHTML($('#content').html(), 15, 15, {
+            'width': 170,
+            'elementHandlers': specialElementHandlers
+        });
+        doc.save('sample-file.pdf');
+    });
+</script>
+<!-- Page specific script -->
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });</script>

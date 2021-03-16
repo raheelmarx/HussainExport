@@ -19,10 +19,12 @@ namespace HussainExport.API.Entities
         public string ReceivableDescription { get; set; }
         public string ReceivableAddress { get; set; }
         public string ReceivablePhone { get; set; }
+        public long? CustomerId { get; set; }
         public DateTime? DateAdded { get; set; }
         public DateTime? DateUpdated { get; set; }
         public bool? IsActive { get; set; }
 
+        public virtual Customer Customer { get; set; }
         public virtual ICollection<TblAccount> TblAccount { get; set; }
     }
 }

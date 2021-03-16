@@ -17,7 +17,7 @@ using System.Text;
 
 namespace HussainExport.Client.Controllers
 {
-    [ServiceFilter(typeof(AuthorizeAttribute))]
+    //[ServiceFilter(typeof(AuthorizeAttribute))]
     public class CustomerController : Controller
     {
         private readonly HEClientContext _context;

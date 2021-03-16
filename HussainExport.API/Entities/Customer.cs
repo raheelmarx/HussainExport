@@ -11,6 +11,7 @@ namespace HussainExport.API.Entities
     {
         public Customer()
         {
+            Receivable = new HashSet<Receivable>();
             SaleContract = new HashSet<SaleContract>();
         }
 
@@ -25,6 +26,7 @@ namespace HussainExport.API.Entities
         public DateTime? DateAdded { get; set; }
         public DateTime? DateUpdated { get; set; }
 
+        public virtual ICollection<Receivable> Receivable { get; set; }
         public virtual ICollection<SaleContract> SaleContract { get; set; }
     }
 }

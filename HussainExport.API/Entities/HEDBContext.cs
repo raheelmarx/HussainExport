@@ -110,6 +110,12 @@ namespace HussainExport.API.Entities
                     .HasForeignKey(d => d.AccountDebitId)
                     .HasConstraintName("FK_Account_Transaction_Account");
 
+                entity.HasOne(d => d.SaleContract)
+                    .WithMany(p => p.AccountTransaction)
+                    .HasForeignKey(d => d.SaleContractId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Account_Transaction_SaleContract");
+
                 entity.HasOne(d => d.TypeNavigation)
                     .WithMany(p => p.AccountTransaction)
                     .HasForeignKey(d => d.Type)
@@ -504,6 +510,8 @@ namespace HussainExport.API.Entities
             {
                 entity.Property(e => e.ReceivableId).HasColumnName("Receivable_ID");
 
+                entity.Property(e => e.CustomerId).HasColumnName("Customer_Id");
+
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 
                 entity.Property(e => e.DateUpdated).HasColumnType("datetime");
@@ -524,6 +532,11 @@ namespace HussainExport.API.Entities
                 entity.Property(e => e.ReceivablePhone)
                     .HasColumnName("Receivable_Phone")
                     .HasMaxLength(50);
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Receivable)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_Receivable_Customer");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -551,6 +564,8 @@ namespace HussainExport.API.Entities
 
                 entity.Property(e => e.ShipmentDetails).HasMaxLength(1000);
 
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 4)");
+
                 entity.HasOne(d => d.Currency)
                     .WithMany(p => p.SaleContract)
                     .HasForeignKey(d => d.CurrencyId)
@@ -564,7 +579,7 @@ namespace HussainExport.API.Entities
 
             modelBuilder.Entity<SaleContractItem>(entity =>
             {
-                entity.Property(e => e.Amount).HasMaxLength(50);
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.Article).HasMaxLength(500);
 
@@ -574,11 +589,11 @@ namespace HussainExport.API.Entities
 
                 entity.Property(e => e.DateUpdated).HasColumnType("datetime");
 
-                entity.Property(e => e.Price).HasMaxLength(50);
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.Quality).HasMaxLength(500);
 
-                entity.Property(e => e.Quantity).HasMaxLength(50);
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.Size).HasMaxLength(50);
 

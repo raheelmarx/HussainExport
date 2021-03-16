@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.SaleContractId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Quality)
             </th>
             <th>
@@ -33,15 +36,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateAdded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
-            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateAdded)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateUpdated)
+        </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.SaleContract)
             </th>
@@ -52,8 +55,17 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var group in Model.GroupBy(item => item.SaleContract))
+        {
+
+            @foreach (var item in group)
+            {
         <tr>
+            <td>
+                @*@Html.Encode(group.Key)*@
+                @Html.DisplayFor(modelItem => item.SaleContractId)
+            </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.Quality)
             </td>
@@ -75,17 +87,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateAdded)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateUpdated)
+        </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateAdded)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateUpdated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SaleContract.SaleContractId)
+                @Html.DisplayFor(modelItem => item.SaleContract.SaleContractNumber)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Unit.UnitId)
@@ -96,6 +108,8 @@
                 <a asp-action="Delete" asp-route-id="@item.SaleContractItemId">Delete</a>
             </td>
         </tr>
-}
-    </tbody>
+                    }
+                
+            }
+        </tbody>
 </table>

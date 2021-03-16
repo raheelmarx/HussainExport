@@ -16,9 +16,9 @@ namespace HussainExport.Client.Models
         public string Color { get; set; }
         public string Size { get; set; }
         public int? UnitId { get; set; }
-        public string Price { get; set; }
-        public string Quantity { get; set; }
-        public string Amount { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? Amount { get; set; }
         public bool? IsActive { get; set; }
         public DateTime? DateAdded { get; set; }
         public DateTime? DateUpdated { get; set; }

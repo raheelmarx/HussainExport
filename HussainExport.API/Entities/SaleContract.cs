@@ -11,13 +11,14 @@ namespace HussainExport.API.Entities
     {
         public SaleContract()
         {
+            AccountTransaction = new HashSet<AccountTransaction>();
             SaleContractItem = new HashSet<SaleContractItem>();
         }
 
         public long SaleContractId { get; set; }
         public string SaleContractNumber { get; set; }
         public long? CustomerId { get; set; }
-        public long? TotalAmount { get; set; }
+        public decimal? TotalAmount { get; set; }
         public int? CurrencyId { get; set; }
         public string DeliveryTime { get; set; }
         public string ShipmentDetails { get; set; }
@@ -29,6 +30,7 @@ namespace HussainExport.API.Entities
 
         public virtual Currency Currency { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual ICollection<AccountTransaction> AccountTransaction { get; set; }
         public virtual ICollection<SaleContractItem> SaleContractItem { get; set; }
     }
 }

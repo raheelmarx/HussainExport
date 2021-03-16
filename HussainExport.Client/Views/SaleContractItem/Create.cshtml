@@ -71,7 +71,7 @@
                 <span asp-validation-for="DateUpdated" class="text-danger"></span>
             </div>*@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" onclick="totalAmount()" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -84,3 +84,12 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    //$(document).ready(function () {
+        
+    //    $("#Amount").val(parseFloat($("#Price").val()) * parseFloat($("#Quantity").val()));
+    //});
+    function totalAmount() {
+        $("#Amount").val(parseFloat($("#Price").val()) * parseFloat($("#Quantity").val()));
+    }
+</script>

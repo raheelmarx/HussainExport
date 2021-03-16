@@ -27,6 +27,7 @@ namespace HussainExport.API.Entities
         public string Narration { get; set; }
         public decimal? AmountDebit { get; set; }
         public decimal? AmountCredit { get; set; }
+        public long SaleContractId { get; set; }
         public string SaleContractNumber { get; set; }
         public DateTime? DateAdded { get; set; }
         public DateTime? DateUpdated { get; set; }
@@ -34,6 +35,7 @@ namespace HussainExport.API.Entities
 
         public virtual TblAccount AccountCredit { get; set; }
         public virtual TblAccount AccountDebit { get; set; }
+        public virtual SaleContract SaleContract { get; set; }
         public virtual TransactionType TypeNavigation { get; set; }
         public virtual ICollection<Assets> Assets { get; set; }
         public virtual ICollection<Inventory> Inventory { get; set; }

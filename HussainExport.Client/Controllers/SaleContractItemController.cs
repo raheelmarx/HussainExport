@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HussainExport.Client.Controllers
 {
-    [ServiceFilter(typeof(AuthorizeAttribute))]
+    //[ServiceFilter(typeof(AuthorizeAttribute))]
     public class SaleContractItemController : Controller
     {
         private readonly HEClientContext _context;
