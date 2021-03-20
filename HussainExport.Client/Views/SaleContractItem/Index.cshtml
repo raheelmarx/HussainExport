@@ -1,115 +1,159 @@
 ﻿@model IEnumerable<HussainExport.Client.Models.SaleContractItemVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Sale Contract Item";
 }
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"> @ViewData["Title"]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
 
-<h1>Index</h1>
+        <div class="row">
+            <div class="col-12">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContractId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quality)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Article)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            @*<th>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateUpdated)
-        </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.SaleContract)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Unit)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var group in Model.GroupBy(item => item.SaleContract))
-        {
 
-            @foreach (var item in group)
-            {
-        <tr>
-            <td>
-                @*@Html.Encode(group.Key)*@
-                @Html.DisplayFor(modelItem => item.SaleContractId)
-            </td>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+                        <div class="float-sm-right">
+                            <p>
+                                <a asp-action="Create" class="btn btn-block btn-primary">Create New</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Quality)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Article)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.IsActive)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateAdded)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateUpdated)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.SaleContract.SaleContractNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Unit.UnitId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SaleContractItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SaleContractItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SaleContractItemId">Delete</a>
-            </td>
-        </tr>
-                    }
-                
-            }
-        </tbody>
-</table>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.Label("Sale Contract ID")
+                                    </th>
+                                    <th>
+                                        @Html.Label("Quality")
+                                    </th>
+                                    <th>
+                                        @Html.Label("Article")
+                                    </th>
+                                    <th>
+                                        @Html.Label("Colour")
+                                    </th>
+                                    <th>
+                                        @Html.Label("Size")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Price)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Quantity)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Amount)
+                                    </th>
+                                    @*<th>
+                                            @Html.DisplayNameFor(model => model.IsActive)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.DateAdded)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.DateUpdated)
+                                        </th>*@
+                                    <th>
+                                        @Html.Label("Sale Contract")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Unit)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var group in Model.GroupBy(item => item.SaleContract))
+                                {
+
+                                    @foreach (var item in group)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @*@Html.Encode(group.Key)*@
+                                                @Html.DisplayFor(modelItem => item.SaleContractId)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Quality)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Article)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Color)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Size)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Price)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Amount)
+                                            </td>
+                                            @*<td>
+                                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.DateAdded)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.DateUpdated)
+                                                </td>*@
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SaleContract.SaleContractNumber)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Unit.UnitId)
+                                            </td>
+                                            <td>
+                                                <a asp-action="Edit" asp-route-id="@item.SaleContractItemId">Edit</a> |
+                                                <a asp-action="Details" asp-route-id="@item.SaleContractItemId">Details</a> |
+                                                <a asp-action="Delete" asp-route-id="@item.SaleContractItemId">Delete</a>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<!-- Page specific script -->

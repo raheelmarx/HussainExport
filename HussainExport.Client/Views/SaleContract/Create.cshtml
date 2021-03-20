@@ -41,12 +41,12 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label asp-for="SaleContractNumber" class="control-label"></label>
+                                        <label asp-for="SaleContractNumber" class="control-label"> Sale Contract Number</label>
                                         <input asp-for="SaleContractNumber" class="form-control" />
                                         <span asp-validation-for="SaleContractNumber" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label asp-for="CustomerId" class="control-label"></label>
+                                        <label asp-for="CustomerId" class="control-label">Customer ID</label>
                                         <select asp-for="CustomerId" class="form-control select2bs4" style="width: 100%;" asp-items="ViewBag.CustomerId"></select>
                                     </div>
                                     @*<div class="form-group">
@@ -55,28 +55,28 @@
                                         <span asp-validation-for="TotalAmount" class="text-danger"></span>
                                     </div>*@
                                     <div class="form-group">
-                                        <label asp-for="CurrencyId" class="control-label"></label>
+                                        <label asp-for="CurrencyId" class="control-label">Currency ID</label>
                                         <select asp-for="CurrencyId" class="form-control select2bs4" style="width: 100%;" asp-items="ViewBag.CurrencyId"></select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label asp-for="DeliveryTime" class="control-label"></label>
+                                        <label asp-for="DeliveryTime" class="control-label">Delivery Time</label>
                                         <input asp-for="DeliveryTime" class="form-control" />
                                         <span asp-validation-for="DeliveryTime" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label asp-for="ShipmentDetails" class="control-label"></label>
+                                        <label asp-for="ShipmentDetails" class="control-label">Shipment Details</label>
                                         <input asp-for="ShipmentDetails" class="form-control" />
                                         <span asp-validation-for="ShipmentDetails" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label asp-for="Packing" class="control-label"></label>
+                                        <label asp-for="Packing" class="control-label">Packing</label>
                                         <input asp-for="Packing" class="form-control" />
                                         <span asp-validation-for="Packing" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label asp-for="Description" class="control-label"></label>
+                                        <label asp-for="Description" class="control-label">Description</label>
                                         <input asp-for="Description" class="form-control" />
                                         <span asp-validation-for="Description" class="text-danger"></span>
                                     </div>
@@ -191,7 +191,7 @@
                             @*</table></div>*@
 
                             <div class="form-group">
-                                <input type="submit" value="Create" class="btn btn-primary" />
+                                <input type="submit" value="Create Contract" class="btn btn-primary" />
                             </div>
                         </form>
                     </div>
