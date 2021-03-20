@@ -22,7 +22,7 @@
 </div>
 <!-- /.content-header -->
 <!-- Main content -->
-<section class="content" id="content">
+<section class="content">
     <div class="container-fluid">
 
         <div class="row">
@@ -36,7 +36,7 @@
                     </div>
 
                     <!-- /.card-header -->
-                    <div class="card-body">
+                    <div class="card-body" id="invoice">
                         <div>
 
                             @Html.DisplayFor(model => model.SaleContractNumber)<br />
@@ -110,9 +110,7 @@
 
                             <thead>
                                 <tr role="row">
-                                    <th>
-                                        @Html.Label("Sale COntract ID")
-                                    </th>
+                                   
                                     <th>
                                         @Html.Label("Quality")
                                     </th>
@@ -147,10 +145,7 @@
                                 {
 
                                     <tr>
-                                        <!--<td>-->
-                                            @*@Html.Encode(group.Key)*@
-                                            <!--@Html.DisplayFor(modelItem => item.SaleContractId)
-                                        </td>-->
+                                       
 
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Quality)
@@ -205,7 +200,7 @@
                             <p>
                                 <a asp-action="Edit" class="btn btn-block btn-primary" asp-route-id="@Model.SaleContractId">Edit</a>
                                 <a asp-action="Index" class="btn btn-block btn-primary">Back to List</a>
-                                <button class="btn btn-block btn-primary" id="cmd">generate PDF</button>
+                                <button class="btn btn-block btn-primary" onclick="generatePDF()">Download as PDF</button>
                             </p>
                         </div>
                     </div>
@@ -220,23 +215,18 @@
 </section>
 <!-- /.content -->
 <script>
-    var doc = new jsPDF();
-    var specialElementHandlers = {
-        '#editor': function (element, renderer) {
-            return true;
-        }
-    };
 
-    $('#cmd').click(function () {
-        doc.fromHTML($('#content').html(), 15, 15, {
-            'width': 170,
-            'elementHandlers': specialElementHandlers
-        });
-        doc.save('sample-file.pdf');
-    });
+    function generatePDF() {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById("invoice");
+        // Choose the element and save the PDF for our user.
+        html2pdf()
+            .from(element)
+            .save();
+    }
 </script>
 <!-- Page specific script -->
-<script>
+@*<script>
     $(function () {
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -251,4 +241,4 @@
             "autoWidth": false,
             "responsive": true,
         });
-    });</script>
+    });</script>*@

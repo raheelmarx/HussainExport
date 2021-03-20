@@ -39,7 +39,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table class="table table-bordered table-striped">
+                        <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>
@@ -61,14 +61,14 @@
                                         @Html.DisplayNameFor(model => model.Email)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IsActive)
-                                    </th>
-                                    <th>
-                                        @Html.Label("Added Date")
-                                    </th>
-                                    <th>
-                                        @Html.Label("Updated Date")
-                                    </th>
+                                            @Html.DisplayNameFor(model => model.IsActive)
+                                        </th>
+                                        <th>
+                                            @Html.Label("Added Date")
+                                        </th>
+                                        <th>
+                                            @Html.Label("Updated Date")
+                                        </th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -95,14 +95,14 @@
                                             @Html.DisplayFor(modelItem => item.Email)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.IsActive)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.DateAdded)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                                        </td>
+                                                @Html.DisplayFor(modelItem => item.IsActive)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DateAdded)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DateUpdated)
+                                            </td>
                                         <td>
                                             <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
                                             <a asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
@@ -125,3 +125,19 @@
 </section>
 <!-- /.content -->
 <!-- Page specific script -->
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });</script>

@@ -216,6 +216,31 @@ namespace HussainExport.API.Controllers
             _context.SaleContractItem.Remove(saleContractItem);
             await _context.SaveChangesAsync();
 
+
+            var allSaleContractItems = _context.SaleContractItem.Where(x => x.SaleContractId == saleContractItem.SaleContractId).ToList();
+            var saleContract = await _context.SaleContract.FindAsync(saleContractItem.SaleContractId);
+            saleContract.TotalAmount = 0;
+            foreach (var item in allSaleContractItems)
+            {
+                saleContract.TotalAmount = saleContract.TotalAmount + item.Amount;
+            }
+            _context.Entry(saleContract).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SaleContractItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             return saleContractItem;
         }
 
