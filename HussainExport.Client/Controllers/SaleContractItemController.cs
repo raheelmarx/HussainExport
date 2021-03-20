@@ -387,7 +387,7 @@ namespace HussainExport.Client.Controllers
                     saleContractItemVM.DateUpdated = DateTime.Now;
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
                     var content = new StringContent(JsonConvert.SerializeObject(saleContractItemVM), Encoding.UTF8, "application/json");
-                    HttpResponseMessage res1 = client.PutAsync("api/SaleContracts/" + id, content).Result;
+                    HttpResponseMessage res1 = client.PutAsync("api/SaleContractItems/" + id, content).Result;
                     if (res1.IsSuccessStatusCode)
                     {
                         return RedirectToAction("Index");

@@ -76,11 +76,11 @@ namespace HussainExport.API.Entities
 
                 entity.Property(e => e.AmountCredit)
                     .HasColumnName("Amount_Credit")
-                    .HasColumnType("decimal(18, 0)");
+                    .HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.AmountDebit)
                     .HasColumnName("Amount_Debit")
-                    .HasColumnType("decimal(18, 0)");
+                    .HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.DateAdded).HasColumnType("datetime");
 

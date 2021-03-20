@@ -76,29 +76,46 @@ namespace HussainExport.API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId).FirstOrDefault();
+                var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId && x.IsActive == true).FirstOrDefault();
+
+                var payableExist = _context.Payable.Where(x => x.PayableName == saleContract.SaleContractNumber && x.IsActive == true).FirstOrDefault();
 
                 if (receivableExist != null)
                 {
-                    var tblAccountSaleContractExist = _context.TblAccount.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == saleContract.SaleContractId);
+                    var tblAccountSaleContractExist = _context.TblAccount.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == payableExist.PayableId).FirstOrDefault();
 
-                    //// Add Sale Contract Account
-                    //TblAccount tblAccountSaleContract = new TblAccount()
-                    //{
-                    //    AccountCode = saleContract.SaleContractNumber,
-                    //    AccountDescription = saleContract.SaleContractNumber,
-                    //    AccountTitle = saleContract.SaleContractNumber,
-                    //    AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault(),
-                    //    DateAdded = DateTime.Now,
-                    //    IsActive = true,
-                    //    PayableId = saleContract.SaleContractId
-                    //};
-                    //_context.TblAccount.Add(tblAccountSaleContract);
+                    // Edit Sale Contract Account
 
+                    tblAccountSaleContractExist.AccountCode = saleContract.SaleContractNumber;
+                    tblAccountSaleContractExist.AccountDescription = saleContract.SaleContractNumber;
+                    tblAccountSaleContractExist.AccountTitle = saleContract.SaleContractNumber;
+                    tblAccountSaleContractExist.AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault();
+                    tblAccountSaleContractExist.DateAdded = DateTime.Now;
+                    tblAccountSaleContractExist.IsActive = true;
+                    tblAccountSaleContractExist.PayableId = payableExist.PayableId;
+                    _context.Entry(tblAccountSaleContractExist).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
                     var tblAccountReceivable = _context.TblAccount.Where(x => x.AccountCode == receivableExist.ReceivableId.ToString() && x.AccountTitle == receivableExist.ReceivableName && x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
-                    // Add Double Entry of Receivable (DR) and Sale Contract Account (CR)
+                    // Edit Double Entry of Receivable (DR) and Sale Contract Account (CR)
+
+                    var accountTransactionExist = _context.AccountTransaction.Where(x => x.AccountCreditCode == tblAccountSaleContractExist.AccountCode && x.AccountCreditId == tblAccountSaleContractExist.AccountId).FirstOrDefault();
+
+                    accountTransactionExist.Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault();
+                    accountTransactionExist.AccountDebitId = tblAccountReceivable.AccountId;
+                    accountTransactionExist.AccountCreditId = tblAccountSaleContractExist.AccountId;
+                    accountTransactionExist.AccountDebitCode = tblAccountReceivable.AccountCode;
+                    accountTransactionExist.AccountCreditCode = tblAccountSaleContractExist.AccountCode;
+                    accountTransactionExist.Narration = "Sale Contract Creation";
+                    accountTransactionExist.AmountDebit = saleContract.TotalAmount;
+                    accountTransactionExist.AmountCredit = saleContract.TotalAmount;
+                    accountTransactionExist.SaleContractNumber = saleContract.SaleContractNumber;
+                    accountTransactionExist.DateAdded = DateTime.Now;
+                    accountTransactionExist.IsActive = true;
+
+                    _context.Entry(accountTransactionExist).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
                     //AccountTransaction accountTransaction = new AccountTransaction()
                     //{
                     //    Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
@@ -139,11 +156,26 @@ namespace HussainExport.API.Controllers
             _context.SaleContract.Add(saleContract);
             await _context.SaveChangesAsync();
 
-            var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId).FirstOrDefault();
+            var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId && x.IsActive==true).FirstOrDefault();
+            //var payableExist = _context.Payable.Where(x => x.PayableName == saleContract.SaleContractNumber && x.IsActive==true).FirstOrDefault();
 
             if (receivableExist != null)
             {
                 //var tblAccountSaleContractExist = _context.TblAccount.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == saleContract.SaleContractId);
+
+                //Add Payable
+                Payable payable = new Payable()
+                {
+                    DateAdded = DateTime.Now,
+                    IsActive = true,
+                    PayableAddress = saleContract.ShipmentDetails,
+                    PayableDescription = "Sale Contract is Paybale",
+                    PayableName = saleContract.SaleContractNumber,
+                    PayablePhone = receivableExist.ReceivablePhone
+                };
+                _context.Payable.Add(payable);
+                await _context.SaveChangesAsync();
+
 
                 // Add Sale Contract Account
                 TblAccount tblAccountSaleContract = new TblAccount()
@@ -154,28 +186,88 @@ namespace HussainExport.API.Controllers
                     AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault(),
                     DateAdded = DateTime.Now,
                     IsActive = true,
-                    PayableId = saleContract.SaleContractId
+                    PayableId = payable.PayableId
                 };
                 _context.TblAccount.Add(tblAccountSaleContract);
-
-                await _context.SaveChangesAsync();
-
-                var tblAccountReceivable = _context.TblAccount.Where(x => x.AccountCode == receivableExist.ReceivableId.ToString() && x.AccountTitle == receivableExist.ReceivableName && x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
-                // Add Double Entry of Receivable (DR) and Sale Contract Account (CR)
-                AccountTransaction accountTransaction = new AccountTransaction()
+                try
                 {
-                    Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
-                    AccountDebitId = tblAccountReceivable.AccountId,
-                    AccountCreditId = tblAccountSaleContract.AccountId,
-                    AccountDebitCode = tblAccountReceivable.AccountCode,
-                    AccountCreditCode = tblAccountSaleContract.AccountCode,
-                    Narration = "Sale Contract Creation",
-                    AmountDebit = saleContract.TotalAmount,
-                    AmountCredit = saleContract.TotalAmount,
-                    SaleContractNumber = saleContract.SaleContractNumber,
-                    DateAdded = DateTime.Now,
-                    IsActive = true
-                };
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    var x = 0;
+                }
+
+                var tblAccountReceivableExist = _context.TblAccount.Where(x => x.AccountCode == receivableExist.ReceivableId.ToString() && x.AccountTitle == receivableExist.ReceivableName && x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
+                if (tblAccountReceivableExist == null)
+                {
+                    //Add Receiveable Account
+                    TblAccount tblAccountReceivable = new TblAccount()
+                    {
+                        AccountCode = receivableExist.ReceivableId.ToString(),
+                        AccountDescription = saleContract.SaleContractNumber,
+                        AccountTitle = receivableExist.ReceivableName,
+                        AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Receivables").Select(x => x.AccountTypeId).FirstOrDefault(),
+                        DateAdded = DateTime.Now,
+                        IsActive = true,
+                        ReceivablesId = receivableExist.ReceivableId
+                    };
+                    _context.TblAccount.Add(tblAccountReceivable);
+                    await _context.SaveChangesAsync();
+
+                    // Add Double Entry of Receivable (DR) and Sale Contract Account (CR)
+                    AccountTransaction accountTransaction = new AccountTransaction()
+                    {
+                        Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
+                        AccountDebitId = tblAccountReceivable.AccountId,
+                        AccountCreditId = tblAccountSaleContract.AccountId,
+                        AccountDebitCode = tblAccountReceivable.AccountCode,
+                        AccountCreditCode = tblAccountSaleContract.AccountCode,
+                        Narration = "Sale Contract Creation",
+                        AmountDebit = saleContract.TotalAmount,
+                        AmountCredit = saleContract.TotalAmount,
+                        SaleContractNumber = saleContract.SaleContractNumber,
+                        DateAdded = DateTime.Now,
+                        IsActive = true
+                    };
+                    _context.AccountTransaction.Add(accountTransaction);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        var x = 0;
+                    }
+                }
+                else
+                {
+                    // Add Double Entry of Receivable (DR) and Sale Contract Account (CR)
+                    AccountTransaction accountTransaction = new AccountTransaction()
+                    {
+                        Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
+                        AccountDebitId = tblAccountReceivableExist.AccountId,
+                        AccountCreditId = tblAccountSaleContract.AccountId,
+                        AccountDebitCode = tblAccountReceivableExist.AccountCode,
+                        AccountCreditCode = tblAccountSaleContract.AccountCode,
+                        Narration = "Sale Contract Creation",
+                        AmountDebit = saleContract.TotalAmount,
+                        AmountCredit = saleContract.TotalAmount,
+                        SaleContractNumber = saleContract.SaleContractNumber,
+                        SaleContractId = saleContract.SaleContractId,
+                        DateAdded = DateTime.Now,
+                        IsActive = true
+                    };
+                    _context.AccountTransaction.Add(accountTransaction);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        var x = 0;
+                    }
+                }
             }
 
             if (receivableExist == null)
@@ -193,6 +285,19 @@ namespace HussainExport.API.Controllers
                     ReceivablePhone = customer.Contact
                 };
                 _context.Receivable.Add(receivable);
+                await _context.SaveChangesAsync();
+
+                //Add Payable
+                Payable payable = new Payable()
+                {
+                    DateAdded = DateTime.Now,
+                    IsActive = true,
+                    PayableAddress = saleContract.ShipmentDetails,
+                    PayableDescription = "Sale Contract is Paybale",
+                    PayableName = saleContract.SaleContractNumber,
+                    PayablePhone = customer.Contact
+                };
+                _context.Payable.Add(payable);
                 await _context.SaveChangesAsync();
 
                 //Add Receiveable Account
@@ -217,7 +322,7 @@ namespace HussainExport.API.Controllers
                     AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault(),
                     DateAdded = DateTime.Now,
                     IsActive = true,
-                    PayableId = saleContract.SaleContractId
+                    PayableId = payable.PayableId
                 };
                 _context.TblAccount.Add(tblAccountSaleContract);
 
@@ -235,6 +340,7 @@ namespace HussainExport.API.Controllers
                     AmountDebit = saleContract.TotalAmount,
                     AmountCredit = saleContract.TotalAmount,
                     SaleContractNumber = saleContract.SaleContractNumber,
+                    SaleContractId = saleContract.SaleContractId,
                     DateAdded = DateTime.Now,
                     IsActive = true
                 };

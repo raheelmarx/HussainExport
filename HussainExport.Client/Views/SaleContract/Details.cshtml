@@ -110,9 +110,9 @@
 
                             <thead>
                                 <tr role="row">
-                                    <th>
+                                    @*<th>
                                         @Html.DisplayNameFor(model => model.SaleContractId)
-                                    </th>
+                                    </th>*@
                                     <th>
                                         @Html.DisplayNameFor(model => Model.SaleContractItem.FirstOrDefault().Quality)
                                     </th>
@@ -147,10 +147,10 @@
                                 {
 
                                     <tr>
-                                        <td>
+                                        <!--<td>-->
                                             @*@Html.Encode(group.Key)*@
-                                            @Html.DisplayFor(modelItem => item.SaleContract.SaleContractNumber)
-                                        </td>
+                                            <!--@Html.DisplayFor(modelItem => item.SaleContractId)
+                                        </td>-->
 
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Quality)

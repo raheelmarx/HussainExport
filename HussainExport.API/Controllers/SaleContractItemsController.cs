@@ -69,16 +69,6 @@ namespace HussainExport.API.Controllers
             {
                 return BadRequest();
             }
-
-            var allSaleContractItems = _context.SaleContractItem.Where(x => x.SaleContractId == saleContractItem.SaleContractId).ToList();
-            var saleContract = await _context.SaleContract.FindAsync(saleContractItem.SaleContractId);
-            saleContract.TotalAmount = 0;
-            foreach ( var item in allSaleContractItems)
-            {
-                saleContract.TotalAmount = saleContract.TotalAmount + item.Amount;
-            }
-            _context.Entry(saleContract).State = EntityState.Modified;
-
             _context.Entry(saleContractItem).State = EntityState.Modified;
 
             try
@@ -97,6 +87,61 @@ namespace HussainExport.API.Controllers
                 }
             }
 
+            var allSaleContractItems = _context.SaleContractItem.Where(x => x.SaleContractId == saleContractItem.SaleContractId).ToList();
+            var saleContract = await _context.SaleContract.FindAsync(saleContractItem.SaleContractId);
+            saleContract.TotalAmount = 0;
+            foreach ( var item in allSaleContractItems)
+            {
+                saleContract.TotalAmount = saleContract.TotalAmount + item.Amount;
+            }
+            _context.Entry(saleContract).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SaleContractItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            // Get Receivable and Add Credit Entry in Account
+            var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId).FirstOrDefault();
+            var payableExist = _context.Payable.Where(x => x.PayableName == saleContract.SaleContractNumber && x.IsActive == true).FirstOrDefault();
+            var tblAccountReceivable = _context.TblAccount.Where(x => x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
+            var tblAccountSaleContractExist = _context.TblAccount.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == payableExist.PayableId).FirstOrDefault();
+
+            // Add Double Entry of Receivable (DR) and Sale Contract Account (CR) => Update only Amount Debit and Credit
+            var accountTransaction = _context.AccountTransaction.Where(x => x.AccountDebitId == tblAccountReceivable.AccountId && x.AccountCreditId == tblAccountSaleContractExist.AccountId && x.AccountCreditCode == tblAccountSaleContractExist.AccountCode).FirstOrDefault();
+
+            accountTransaction.AmountDebit = saleContract.TotalAmount;
+            accountTransaction.AmountCredit = saleContract.TotalAmount;
+
+            _context.Entry(accountTransaction).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SaleContractItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+
             return NoContent();
         }
 
@@ -109,39 +154,44 @@ namespace HussainExport.API.Controllers
             try
             {
                 _context.SaleContractItem.Add(saleContractItem);
+                await _context.SaveChangesAsync();
                 // Add/Update Sale Contract Total Amount
                 var saleContract = await _context.SaleContract.FindAsync(saleContractItem.SaleContractId);
                 saleContract.TotalAmount = saleContract.TotalAmount + saleContractItem.Amount;
                 _context.Entry(saleContract).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
 
                 // Get Receivable and Add Credit Entry in Account
                 var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId).FirstOrDefault();
-                if(receivableExist==null)
-                {
-                    var customer = await _context.Customer.FindAsync(saleContract.CustomerId);
+                //if(receivableExist==null)
+                //{
+                //    var customer = await _context.Customer.FindAsync(saleContract.CustomerId);
 
-                    receivableExist = new Receivable();
-                    receivableExist.ReceivableName = saleContract.Customer.CustomerName;
-                    receivableExist.ReceivablePhone = saleContract.Customer.Contact;
-                    receivableExist.ReceivableAddress = saleContract.Customer.Address;
-                    receivableExist.ReceivableDescription = saleContract.Customer.CustomerDescription;
-                    receivableExist.Customer = saleContract.Customer;
-                    receivableExist.CustomerId = saleContract.CustomerId;
-                    receivableExist.DateAdded = DateTime.Now;
-                    receivableExist.IsActive = true;
+                //    receivableExist = new Receivable();
+                //    receivableExist.ReceivableName = saleContract.Customer.CustomerName;
+                //    receivableExist.ReceivablePhone = saleContract.Customer.Contact;
+                //    receivableExist.ReceivableAddress = saleContract.Customer.Address;
+                //    receivableExist.ReceivableDescription = saleContract.Customer.CustomerDescription;
+                //    receivableExist.Customer = saleContract.Customer;
+                //    receivableExist.CustomerId = saleContract.CustomerId;
+                //    receivableExist.DateAdded = DateTime.Now;
+                //    receivableExist.IsActive = true;
 
-                    _context.Receivable.Add(receivableExist);
-                }
+                //    _context.Receivable.Add(receivableExist);
+                //}
 
                 var tblAccountReceivable = _context.TblAccount.Where(x => x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
+                var payableExist = _context.Payable.Where(x => x.PayableName == saleContract.SaleContractNumber && x.IsActive == true).FirstOrDefault();
 
-                var tblAccountSaleContract = _context.TblAccount.Where(x => x.PayableId == saleContractItem.SaleContractId && x.AccountCode == saleContract.SaleContractNumber ).FirstOrDefault();
+                var tblAccountSaleContractExist = _context.TblAccount.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == payableExist.PayableId).FirstOrDefault();
+
                 // Add Double Entry of Receivable (DR) and Sale Contract Account (CR) => Update only Amount Debit and Credit
-                var accountTransaction = _context.AccountTransaction.Where(x => x.AccountDebitId == tblAccountReceivable.AccountId && x.AccountCreditId == tblAccountSaleContract.AccountId).FirstOrDefault();
+                var accountTransaction = _context.AccountTransaction.Where(x => x.AccountDebitId == tblAccountReceivable.AccountId && x.AccountCreditId == tblAccountSaleContractExist.AccountId && x.AccountCreditCode == tblAccountSaleContractExist.AccountCode).FirstOrDefault();
+               
                 accountTransaction.AmountDebit = saleContract.TotalAmount;
                 accountTransaction.AmountCredit = saleContract.TotalAmount;
 
-                _context.Entry(saleContract).State = EntityState.Modified;
+                _context.Entry(accountTransaction).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
 
