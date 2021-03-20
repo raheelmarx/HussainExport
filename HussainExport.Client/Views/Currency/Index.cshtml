@@ -1,65 +1,110 @@
 ﻿@model IEnumerable<HussainExport.Client.Models.CurrencyVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Currency";
 }
 
-<h1>Index</h1>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"> @ViewData["Title"]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencySymbol)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateAdded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrencyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrencySymbol)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateAdded)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateUpdated)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CurrencyId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CurrencyId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CurrencyId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+                        <div class="float-sm-right">
+                            <p>
+                                <a asp-action="Create" class="btn btn-block btn-primary">Create New</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.Label("Currency Name")
+                                    </th>
+                                    <th>
+                                        @Html.Label("Currency Symbol")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Description)
+                                    </th>
+                                    <th>
+                                        @Html.Label("Is Active")
+                                    </th>
+                                    <th>
+                                        @Html.Label("Added Date")
+                                    </th>
+                                    <th>
+                                        @Html.Label("Updated Date")
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CurrencyName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CurrencySymbol)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IsActive)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DateAdded)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DateUpdated)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.CurrencyId">Edit</a> |
+                                            <a asp-action="Details" asp-route-id="@item.CurrencyId">Details</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.CurrencyId">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<!-- Page specific script -->

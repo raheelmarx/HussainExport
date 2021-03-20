@@ -1,7 +1,7 @@
 ﻿@model HussainExport.Client.Models.SaleContractVM
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Sale Contract";
 }
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -37,67 +37,67 @@
                     <div class="card-body">
                         <dl class="row">
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.SaleContractNumber)
+                                @Html.Label("Sale Contract Number")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.SaleContractNumber)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.TotalAmount)
+                                @Html.Label("Total Amount")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.TotalAmount)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.DeliveryTime)
+                                @Html.Label("Delivery Time")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.DeliveryTime)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.ShipmentDetails)
+                                @Html.Label("Shipment Details")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.ShipmentDetails)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Packing)
+                                @Html.Label("Packing")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.Packing)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Description)
+                                @Html.Label("Description")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.Description)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.IsActive)
+                                @Html.Label("IsActive")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.IsActive)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.DateAdded)
+                                @Html.Label("Added Date")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.DateAdded)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.DateUpdated)
+                                @Html.Label("Updated Date")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.DateUpdated)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Currency)
+                                @Html.Label("Currency")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.Currency.CurrencyId)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Customer)
+                                @Html.Label("Customer")
                             </dt>
                             <dd class="col-sm-10">
                                 @Html.DisplayFor(model => model.Customer.CustomerId)
@@ -125,6 +125,3 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
-
-                    </div>
