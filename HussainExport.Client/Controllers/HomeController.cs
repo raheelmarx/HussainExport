@@ -22,6 +22,7 @@ namespace HussainExport.Client.Controllers
 
         public IActionResult Index()
         {
+            string str = TempData.Peek("Token").ToString();
             return View();
         }
 

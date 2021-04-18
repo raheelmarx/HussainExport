@@ -2,10 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
-
 namespace HussainExport.API.Entities
 {
     public partial class HEDBContext : DbContext
@@ -30,6 +26,8 @@ namespace HussainExport.API.Entities
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<FabricPurchase> FabricPurchase { get; set; }
+        public virtual DbSet<FabricPurchaseItem> FabricPurchaseItem { get; set; }
         public virtual DbSet<Inventory> Inventory { get; set; }
         public virtual DbSet<MigrationHistory> MigrationHistory { get; set; }
         public virtual DbSet<OwnerEquity> OwnerEquity { get; set; }
@@ -315,6 +313,77 @@ namespace HussainExport.API.Entities
                 entity.Property(e => e.DateUpdated).HasColumnType("datetime");
 
                 entity.Property(e => e.Email).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<FabricPurchase>(entity =>
+            {
+                entity.Property(e => e.Broker)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ContQuality)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ConversionRate)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+
+                entity.Property(e => e.DeliveryTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Gstquality)
+                    .HasColumnName("GSTQuality")
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PerMeterRate).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.PerPickRate).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.QuantityInMeters).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.SaleContractNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Weaver)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.SaleContract)
+                    .WithMany(p => p.FabricPurchase)
+                    .HasForeignKey(d => d.SaleContractId)
+                    .HasConstraintName("FK_FabricPurchase_SaleContract");
+            });
+
+            modelBuilder.Entity<FabricPurchaseItem>(entity =>
+            {
+                entity.Property(e => e.CountMargin).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+
+                entity.Property(e => e.FabricRatePerMeter).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.RequiredBags).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.WeightPerMeterIbs).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Yarn)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.YarnRatePerIbs).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.FabricPurchase)
+                    .WithMany(p => p.FabricPurchaseItem)
+                    .HasForeignKey(d => d.FabricPurchaseId)
+                    .HasConstraintName("FK_FabricPurchaseItem_FabricPurchase");
             });
 
             modelBuilder.Entity<Inventory>(entity =>

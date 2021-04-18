@@ -17,9 +17,9 @@ namespace HussainExport.Client.Helpers
             //Passing service base url    
             client.BaseAddress = new Uri(_apiBaseURI);
 
-            client.DefaultRequestHeaders.Clear();
+            //client.DefaultRequestHeaders.Clear();
             //Define request data format    
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return client;
         }

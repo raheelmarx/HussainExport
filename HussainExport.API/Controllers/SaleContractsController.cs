@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HussainExport.API.Entities;
 using HussainExport.API.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace HussainExport.API.Controllers
 {
-    //[Authorize]
+    
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class SaleContractsController : ControllerBase
     {

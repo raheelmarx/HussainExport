@@ -1,0 +1,125 @@
+﻿@model IEnumerable<HussainExport.Client.Models.FabricPurchaseVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContractNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weaver)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContQuality)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gstquality)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsConversionContract)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConversionRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PerPickRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PerMeterRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuantityInMeters)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Broker)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAdded)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleContract)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaleContractNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weaver)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContQuality)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gstquality)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsConversionContract)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConversionRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PerPickRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PerMeterRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityInMeters)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Broker)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAdded)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaleContract.SaleContractId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FabricPurchaseId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FabricPurchaseId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FabricPurchaseId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

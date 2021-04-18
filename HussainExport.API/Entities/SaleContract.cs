@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
-
 namespace HussainExport.API.Entities
 {
     public partial class SaleContract
@@ -12,6 +8,7 @@ namespace HussainExport.API.Entities
         public SaleContract()
         {
             AccountTransaction = new HashSet<AccountTransaction>();
+            FabricPurchase = new HashSet<FabricPurchase>();
             SaleContractItem = new HashSet<SaleContractItem>();
         }
 
@@ -31,6 +28,7 @@ namespace HussainExport.API.Entities
         public virtual Currency Currency { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual ICollection<AccountTransaction> AccountTransaction { get; set; }
+        public virtual ICollection<FabricPurchase> FabricPurchase { get; set; }
         public virtual ICollection<SaleContractItem> SaleContractItem { get; set; }
     }
 }
