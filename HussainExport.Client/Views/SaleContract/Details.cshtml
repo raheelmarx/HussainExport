@@ -30,87 +30,103 @@
 
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">@ViewData["Title"]</h3>
-
-                    </div>
-
-                    <!-- /.card-header -->
+                   
                     <div class="card-body" id="invoice">
-                        <div>
-
-                            @Html.DisplayFor(model => model.SaleContractNumber)<br />
-                            @DateTime.Now
+                        <div class="row">
+                            <div class="col-md-4">@*<img src="~/Images/HELogo.jpeg">*@</div>
+                            <div class="col-md-4">
+                                <div class="card-header" style="border:none; font-family:Pristina; font-weight: bold; ">
+                                    <h1 class="text-center" style="font-size: 40px;">
+                                        <span class="font-italic">Hussain Exports</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="col-md-4">@*<img src="~/Images/HELogo.jpeg">*@</div>
                         </div>
-                        <br />
-                        <br />
-                        <div>
-                            <h4 class="card-title">Customer Name and Address</h4><br />
-                            @Html.DisplayFor(model => model.Customer.CustomerName)<br />
-                            @Html.DisplayFor(model => model.Customer.Address)
+                       
+                        <div class="card-header" style="border: none; text-decoration: underline;">
+                            <center><h5 class="text-center">SALE CONTRACT</h5></center>
                         </div>
-                        <div>
+                        <div class="row" style="font-family:Cambria;">
+                            <div class="col-md-8">
+                                <h4 class="card-title" style="text-decoration: underline; font-weight: bold;">Customer Name and Address</h4><br />
+                                @Html.DisplayFor(model => model.Customer.CustomerName) <br />
+                                @Html.DisplayFor(model => model.Customer.Address)
+                            </div>
+                            <div class="col-md-4">
+                                <span class="col-md-6">
+                                    @Html.DisplayFor(model => model.SaleContractNumber)<br />
+                                    @DateTime.Now
+                                </span>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="text-center" style="font-size: small;">
                             <br />
                             <p>Through negotiation, Party A and Party B enter into this contract, whereby Party B agrees to buy goods listed below on the A terms and conditions stipulated below. This contract should be executed in two counterparts with each of the parties hereto holding one. The Copies delivered through telefax/email shall be as valid as original. This contract must be signed and stamped back to us within 3 working days.</p>
                         </div>
+                        <div style="font-size: small; font-weight:bolder">
+                            <br />
+                            <p>Good's Construction, description, price and quantity:</p>
+                        </div>
                         @*<dl class="row">
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.SaleContractNumber)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.SaleContractNumber)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.TotalAmount)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.TotalAmount)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.DeliveryTime)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.DeliveryTime)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.ShipmentDetails)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.ShipmentDetails)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.Packing)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.Packing)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.Description)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.Description)
-                                </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.SaleContractNumber)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.SaleContractNumber)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TotalAmount)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DeliveryTime)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DeliveryTime)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ShipmentDetails)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ShipmentDetails)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Packing)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Packing)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
 
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.Currency)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.Currency.CurrencyId)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.Customer)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.Customer.CustomerName)
-                                </dd>
-                            </dl>*@
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Currency)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Currency.CurrencyId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Customer.CustomerName)
+            </dd>
+        </dl>*@
 
 
                         <table id="example1" class="table table-bordered table-striped">
 
                             <thead>
                                 <tr role="row">
-                                   
+
                                     <th>
                                         @Html.Label("Quality")
                                     </th>
@@ -145,7 +161,7 @@
                                 {
 
                                     <tr>
-                                       
+
 
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Quality)
@@ -180,19 +196,53 @@
 
                             </tbody>
                         </table>
+                        <div class="text-center" style="font-size: small; font-weight:bolder;">
+                            <span class="row">
+                                <div class="col-md-6"> Total Fabric: 65,000 mtrs</div>
+                                <div class="col-md-6"> Total Amount: @Html.DisplayFor(model => model.TotalAmount)</div>
+                            </span>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 5em;">
+                            <div class="row">
+                                <div class="col-md-2"> Tolerance:</div>
+                                <div class="col-md-10"> 10% +/- must be allowed in Quantity & Quality Specification.<br /> 3% +/- Yarn & Density Allow</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">@Html.DisplayNameFor(model => model.Packing):</div>
+                                <div class="col-md-10"> @Html.DisplayFor(model => model.Packing)</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2"> @Html.DisplayNameFor(model => model.ShipmentDetails):</div>
+                                <div class="col-md-10"> @Html.DisplayFor(model => model.ShipmentDetails)</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2"> Bank Details:</div>
+                                <div class="col-md-10">
+                                    Account No. 0665-0010063938330017 <br />
+                                    in the name of M/S; HUSSAIN EXPORTS. Allied Bank Ltd., Pakistan. Swift Code:<br />
+                                    ABPAPKKAXXX
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    Seller: <br />
+                                    Zubair Mohsin
+                                </div>
+                                <div class="col-md-7">
+                                    Buyer: <br />
+                                    @Html.DisplayFor(model => model.Customer.CustomerName) <br />
+                                    @Html.DisplayFor(model => model.Customer.Address)
+                                </div>
+                            </div>
+                            <div class="footer">
+                                <div class="text-center" style="font-size: small; font-weight: bold; margin-top: 3em">
+                                    <div class="col-md-12">556-A Small Industrial Estate, Sargodha Road Faisalabad, Pakistan</div>
+                                    <div class="col-md-12">Contact No.: +92 (0) 418810333 | Email Address: zubair@hussainexports.com</div>
+                                </div>
+                            </div>
 
-                        <div>
-                            Tolerance: 10% +/- must be allowed in Quantity & Quality Specification. 3% +/- Yarn & Density Allow
                         </div>
-                        <div>
-                            @Html.DisplayNameFor(model => model.Packing):  @Html.DisplayFor(model => model.Packing)
-                        </div>
-                        <div>
-                            @Html.DisplayNameFor(model => model.ShipmentDetails):  @Html.DisplayFor(model => model.ShipmentDetails)
-                        </div>
-                        <div>
-                            Bank Details:  Account No. 0665-0010063938330017 in the name of M/S; HUSSAIN EXPORTS. Allied Bank Ltd., Pakistan. Swift Code: ABPAPKKAXXX
-                        </div>
+
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
