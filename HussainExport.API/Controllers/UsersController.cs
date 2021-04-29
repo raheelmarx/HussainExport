@@ -25,7 +25,7 @@ namespace HussainExport.API.Controllers
             _userService = userService;
         }
 
-        [Authorize]
+        //[Authorize]
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
@@ -33,7 +33,7 @@ namespace HussainExport.API.Controllers
             return await _context.User.ToListAsync();
         }
 
-        [Authorize]
+        //[Authorize]
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(long id)
@@ -48,7 +48,7 @@ namespace HussainExport.API.Controllers
             return user;
         }
 
-        [Authorize]
+        //[Authorize]
         // PUT: api/Users/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -94,7 +94,7 @@ namespace HussainExport.API.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        [Authorize]
+        //[Authorize]
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(long id)
@@ -111,7 +111,7 @@ namespace HussainExport.API.Controllers
             return user;
         }
 
-        [Authorize]
+        //[Authorize]
         private bool UserExists(long id)
         {
             return _context.User.Any(e => e.Id == id);
@@ -128,7 +128,7 @@ namespace HussainExport.API.Controllers
             return Ok(response);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public IActionResult GetAll()
         {

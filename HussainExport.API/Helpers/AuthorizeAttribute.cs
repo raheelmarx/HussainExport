@@ -15,6 +15,7 @@ namespace HussainExport.API.Helpers
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var user = (User)context.HttpContext.Items["User"];
+            var token = context.HttpContext.Items["Token"];
             if (user == null)
             {
                 // not logged in

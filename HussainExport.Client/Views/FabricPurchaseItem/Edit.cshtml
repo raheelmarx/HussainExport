@@ -1,0 +1,79 @@
+﻿@model HussainExport.Client.Models.FabricPurchaseItemVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>FabricPurchaseItemVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="FabricPurchaseItemId" />
+            <div class="form-group">
+                <label asp-for="FabricPurchaseId" class="control-label"></label>
+                <select asp-for="FabricPurchaseId" class="form-control" asp-items="ViewBag.FabricPurchaseId"></select>
+                <span asp-validation-for="FabricPurchaseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Yarn" class="control-label"></label>
+                <input asp-for="Yarn" class="form-control" />
+                <span asp-validation-for="Yarn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YarnRatePerIbs" class="control-label"></label>
+                <input asp-for="YarnRatePerIbs" class="form-control" />
+                <span asp-validation-for="YarnRatePerIbs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CountMargin" class="control-label"></label>
+                <input asp-for="CountMargin" class="form-control" />
+                <span asp-validation-for="CountMargin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeightPerMeterIbs" class="control-label"></label>
+                <input asp-for="WeightPerMeterIbs" class="form-control" />
+                <span asp-validation-for="WeightPerMeterIbs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequiredBags" class="control-label"></label>
+                <input asp-for="RequiredBags" class="form-control" />
+                <span asp-validation-for="RequiredBags" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FabricRatePerMeter" class="control-label"></label>
+                <input asp-for="FabricRatePerMeter" class="form-control" />
+                <span asp-validation-for="FabricRatePerMeter" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label"></label>
+                <input asp-for="IsActive" class="form-control" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateAdded" class="control-label"></label>
+                <input asp-for="DateAdded" class="form-control" />
+                <span asp-validation-for="DateAdded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateUpdated" class="control-label"></label>
+                <input asp-for="DateUpdated" class="form-control" />
+                <span asp-validation-for="DateUpdated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

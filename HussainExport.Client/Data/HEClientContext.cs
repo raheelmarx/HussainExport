@@ -25,5 +25,9 @@ namespace HussainExport.Client.Data
         public DbSet<HussainExport.Client.Models.UnitVM> UnitVM { get; set; }
 
         public DbSet<HussainExport.Client.Models.SaleContractItemVM> SaleContractItemVM { get; set; }
+
+        public DbSet<HussainExport.Client.Models.FabricPurchaseVM> FabricPurchaseVM { get; set; }
+
+        public DbSet<HussainExport.Client.Models.FabricPurchaseItemVM> FabricPurchaseItemVM { get; set; }
     }
 }

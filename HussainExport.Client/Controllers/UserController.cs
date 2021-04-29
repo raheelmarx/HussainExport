@@ -47,24 +47,29 @@ namespace HussainExport.Client.Controllers
 
                 //Deserializing the response recieved from web api and storing into the Employee list    
                 UserVM = JsonConvert.DeserializeObject<UserVM>(result);
-
-                HttpContext.Session.SetString("Name", UserVM.FirstName + ' ' + UserVM.LastName);
-                HttpContext.Session.SetString("Role", UserVM.RoleId.ToString());
-                HttpContext.Session.SetString("token", UserVM.Token);
+                TempData["Token"] = UserVM.Token;
+                HttpContext.Session.SetString("Token", UserVM.Token);
+                //TempData["User"] = UserVM;
+                //HttpContext.Session.SetString("Name", UserVM.FirstName + ' ' + UserVM.LastName);
+                //HttpContext.Session.SetString("Role", UserVM.RoleId.ToString());
+                //HttpContext.Session.SetString("token", UserVM.Token);
+                HttpContext.Session.SetString("User", JsonConvert.SerializeObject(UserVM));
 
             }
+            //return View( "~/Views/Home/Index", UserVM);
             //returning the employee list to view    
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home",  UserVM.Token );
+            return RedirectToAction("Index", "Home", new { Token = UserVM.Token });
         }
 
-        [ServiceFilter(typeof(AuthorizeAttribute))]
+        //[ServiceFilter(typeof(AuthorizeAttribute))]
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("token");
-            HttpContext.Session.Remove("Name");
-            HttpContext.Session.Remove("Role");
+            HttpContext.Session.Remove("Token");
+            //HttpContext.Session.Remove("Name");
+            //HttpContext.Session.Remove("Role");
             ViewBag.Message = "UserVM logged out successfully!";
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("SignIn", "User");
         }
 
         public IActionResult Welcome()
@@ -72,7 +77,7 @@ namespace HussainExport.Client.Controllers
             return View();
         }
 
-        [ServiceFilter(typeof(AuthorizeAttribute))]
+        //[ServiceFilter(typeof(AuthorizeAttribute))]
         public async Task<IActionResult> Create()
         {
             HttpClient client = _helperAPI.InitializeClient();
@@ -104,7 +109,7 @@ namespace HussainExport.Client.Controllers
             return View();
         }
         // POST: AspNetRoles/Create  
-        [ServiceFilter(typeof(AuthorizeAttribute))]
+        //[ServiceFilter(typeof(AuthorizeAttribute))]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FirstName,LastName,UserName,Password,RoleId")] UserVM UserVM)
@@ -125,7 +130,7 @@ namespace HussainExport.Client.Controllers
             return View(UserVM);
         }
 
-        [ServiceFilter(typeof(AuthorizeAttribute))]
+        //[ServiceFilter(typeof(AuthorizeAttribute))]
         public async Task<IActionResult> GetAll()
         {
             List<UserVM> UserVMs = new List<UserVM>();

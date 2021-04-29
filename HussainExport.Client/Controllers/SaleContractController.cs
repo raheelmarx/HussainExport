@@ -15,6 +15,8 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authentication;
 
 namespace HussainExport.Client.Controllers
 {
@@ -36,12 +38,17 @@ namespace HussainExport.Client.Controllers
 
             HttpClient client = _helperAPI.InitializeClient();
 
-            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            var contentType = new MediaTypeWithQualityHeaderValue(@"application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
+            var token = TempData.Peek("Token").ToString();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JsonConvert.SerializeObject(token, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MTcyMjE2MDEsImV4cCI6MTYxNzgyNjQwMSwiaWF0IjoxNjE3MjIxNjAxfQ.q-5ic_D3lYkCsftS8Dr2qUjsmxkSqq-22hq-GpxC9QU");
 
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts");
+
+          
 
             if (res.StatusCode == HttpStatusCode.Unauthorized)
             {
@@ -63,6 +70,23 @@ namespace HussainExport.Client.Controllers
             return View(saleContractVM);
             //var hEClientContext = _context.SaleContractVM.Include(s => s.Currency).Include(s => s.Customer);
             //return View(await hEClientContext.ToListAsync());
+        }
+
+
+        public async Task<IActionResult> CallApi()
+        {
+            string accessToken = TempData.Peek("Token").ToString();
+            HttpClient client = _helperAPI.InitializeClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/SaleContracts");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return Content(response.ToString());
+            }
+
+            return Content($"{await response.Content.ReadAsStringAsync()}");
         }
 
         // GET: SaleContract/Details/5

@@ -1,0 +1,89 @@
+﻿@model IEnumerable<HussainExport.Client.Models.FabricPurchaseItemVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Yarn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YarnRatePerIbs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CountMargin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeightPerMeterIbs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequiredBags)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FabricRatePerMeter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAdded)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FabricPurchase)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Yarn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YarnRatePerIbs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountMargin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeightPerMeterIbs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequiredBags)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FabricRatePerMeter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAdded)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FabricPurchase.FabricPurchaseId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FabricPurchaseItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FabricPurchaseItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FabricPurchaseItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
