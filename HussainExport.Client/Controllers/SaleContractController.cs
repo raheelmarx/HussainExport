@@ -41,7 +41,8 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue(@"application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             var token = TempData.Peek("Token").ToString();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JsonConvert.SerializeObject(token, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JsonConvert.SerializeObject(token, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
             //client.DefaultRequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MTcyMjE2MDEsImV4cCI6MTYxNzgyNjQwMSwiaWF0IjoxNjE3MjIxNjAxfQ.q-5ic_D3lYkCsftS8Dr2qUjsmxkSqq-22hq-GpxC9QU");

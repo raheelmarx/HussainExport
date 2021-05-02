@@ -24,14 +24,14 @@ namespace HussainExport.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Inventory>>> GetInventory()
         {
-            return await _context.Inventory.ToListAsync();
+            return await _context.Inventories.ToListAsync();
         }
 
         // GET: api/Inventory/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Inventory>> GetInventory(long id)
         {
-            var inventory = await _context.Inventory.FindAsync(id);
+            var inventory = await _context.Inventories.FindAsync(id);
 
             if (inventory == null)
             {
@@ -79,7 +79,7 @@ namespace HussainExport.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Inventory>> PostInventory(Inventory inventory)
         {
-            _context.Inventory.Add(inventory);
+            _context.Inventories.Add(inventory);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetInventory", new { id = inventory.InventoryId }, inventory);
@@ -89,13 +89,13 @@ namespace HussainExport.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Inventory>> DeleteInventory(long id)
         {
-            var inventory = await _context.Inventory.FindAsync(id);
+            var inventory = await _context.Inventories.FindAsync(id);
             if (inventory == null)
             {
                 return NotFound();
             }
 
-            _context.Inventory.Remove(inventory);
+            _context.Inventories.Remove(inventory);
             await _context.SaveChangesAsync();
 
             return inventory;
@@ -103,7 +103,7 @@ namespace HussainExport.API.Controllers
 
         private bool InventoryExists(long id)
         {
-            return _context.Inventory.Any(e => e.InventoryId == id);
+            return _context.Inventories.Any(e => e.InventoryId == id);
         }
     }
 }

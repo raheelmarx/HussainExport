@@ -60,22 +60,38 @@ namespace HussainExport.API
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-        .AddJwtBearer(x =>
-        {
-            x.RequireHttpsMetadata = false;
-            x.SaveToken = true;
-            x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = issuer,
-                ValidAudience = audience,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ClockSkew = TimeSpan.Zero
-            };
-        });
+                 .AddJwtBearer(x =>
+                 {
+                     x.RequireHttpsMetadata = false;
+                     x.SaveToken = true;
+                     x.TokenValidationParameters = new TokenValidationParameters
+                     {
+                         ValidateIssuer = false,
+                         ValidateAudience = false,
+                         ValidateLifetime = true,
+                         ValidateIssuerSigningKey = true,
+                         //ValidIssuer = issuer,
+                         //ValidAudience = audience,
+                         //IssuerSigningKey = new SymmetricSecurityKey(key),
+                         ClockSkew = TimeSpan.Zero
+                     };
+                 });
+        //.AddJwtBearer(x =>
+        //{
+        //    x.RequireHttpsMetadata = false;
+        //    x.SaveToken = true;
+        //    x.TokenValidationParameters = new TokenValidationParameters
+        //    {
+        //        ValidateIssuer = true,
+        //        ValidateAudience = true,
+        //        ValidateLifetime = true,
+        //        ValidateIssuerSigningKey = true,
+        //        ValidIssuer = issuer,
+        //        ValidAudience = audience,
+        //        IssuerSigningKey = new SymmetricSecurityKey(key),
+        //        ClockSkew = TimeSpan.Zero
+        //    };
+        //});
             services.AddAuthorization();
 
             services.AddMvc();

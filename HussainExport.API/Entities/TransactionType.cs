@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class TransactionType
     {
         public TransactionType()
         {
-            AccountTransaction = new HashSet<AccountTransaction>();
+            AccountTransactions = new HashSet<AccountTransaction>();
         }
 
         public long TransactionTypeId { get; set; }
@@ -17,6 +19,6 @@ namespace HussainExport.API.Entities
         public DateTime? DateUpdated { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual ICollection<AccountTransaction> AccountTransaction { get; set; }
+        public virtual ICollection<AccountTransaction> AccountTransactions { get; set; }
     }
 }

@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class FabricPurchase
     {
         public FabricPurchase()
         {
-            FabricPurchaseItem = new HashSet<FabricPurchaseItem>();
+            FabricPurchaseItems = new HashSet<FabricPurchaseItem>();
         }
 
         public long FabricPurchaseId { get; set; }
         public long? SaleContractId { get; set; }
         public string SaleContractNumber { get; set; }
-        public string Weaver { get; set; }
+        public long? Weaver { get; set; }
         public string ContQuality { get; set; }
         public string Gstquality { get; set; }
         public bool? IsConversionContract { get; set; }
@@ -29,6 +31,6 @@ namespace HussainExport.API.Entities
         public DateTime? DateUpdated { get; set; }
 
         public virtual SaleContract SaleContract { get; set; }
-        public virtual ICollection<FabricPurchaseItem> FabricPurchaseItem { get; set; }
+        public virtual ICollection<FabricPurchaseItem> FabricPurchaseItems { get; set; }
     }
 }
