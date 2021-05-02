@@ -13,7 +13,7 @@ namespace HussainExport.API.Controllers
 {
     
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class SaleContractsController : ControllerBase
     {
@@ -28,15 +28,15 @@ namespace HussainExport.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SaleContract>>> GetSaleContract()
         {
-            return await _context.SaleContract.ToListAsync();
+            return await _context.SaleContracts.ToListAsync();
         }
 
         // GET: api/SaleContracts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<SaleContract>> GetSaleContract(long id)
         {
-            var saleContract = await _context.SaleContract.FindAsync(id);
-            //var saleContractItems = _context.SaleContractItem.Where(x => x.SaleContractId == id).ToList();
+            var saleContract = await _context.SaleContracts.FindAsync(id);
+            //var saleContractItems = _context.SaleContractItems.Where(x => x.SaleContractId == id).ToList();
             //saleContract.SaleContractItem = saleContractItems;
 
             if (saleContract == null)
@@ -50,9 +50,9 @@ namespace HussainExport.API.Controllers
         [HttpGet("GetSaleContractDetails/{id}")]
         public SaleContract GetSaleContractDetails(long id)
         {
-            var saleContract =  _context.SaleContract.Where(x=>x.SaleContractId == id).FirstOrDefault();
-            var saleContractItems = _context.SaleContractItem.Where(x => x.SaleContractId == id).ToList();
-            saleContract.SaleContractItem = saleContractItems;
+            var saleContract =  _context.SaleContracts.Where(x=>x.SaleContractId == id).FirstOrDefault();
+            var saleContractItems = _context.SaleContractItems.Where(x => x.SaleContractId == id).ToList();
+            saleContract.SaleContractItems = saleContractItems;
 
             //if (saleContract == null)
             //{
@@ -78,32 +78,32 @@ namespace HussainExport.API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId && x.IsActive == true).FirstOrDefault();
+                var receivableExist = _context.Receivables.Where(x => x.CustomerId == saleContract.CustomerId && x.IsActive == true).FirstOrDefault();
 
-                var payableExist = _context.Payable.Where(x => x.PayableName == saleContract.SaleContractNumber && x.IsActive == true).FirstOrDefault();
+                var payableExist = _context.Payables.Where(x => x.PayableName == saleContract.SaleContractNumber && x.IsActive == true).FirstOrDefault();
 
                 if (receivableExist != null)
                 {
-                    var tblAccountSaleContractExist = _context.TblAccount.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == payableExist.PayableId).FirstOrDefault();
+                    var tblAccountSaleContractExist = _context.TblAccounts.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == payableExist.PayableId).FirstOrDefault();
 
                     // Edit Sale Contract Account
 
                     tblAccountSaleContractExist.AccountCode = saleContract.SaleContractNumber;
                     tblAccountSaleContractExist.AccountDescription = saleContract.SaleContractNumber;
                     tblAccountSaleContractExist.AccountTitle = saleContract.SaleContractNumber;
-                    tblAccountSaleContractExist.AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault();
+                    tblAccountSaleContractExist.AccountTypeId = _context.AccountTypes.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault();
                     tblAccountSaleContractExist.DateAdded = DateTime.Now;
                     tblAccountSaleContractExist.IsActive = true;
                     tblAccountSaleContractExist.PayableId = payableExist.PayableId;
                     _context.Entry(tblAccountSaleContractExist).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
-                    var tblAccountReceivable = _context.TblAccount.Where(x => x.AccountCode == receivableExist.ReceivableId.ToString() && x.AccountTitle == receivableExist.ReceivableName && x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
+                    var tblAccountReceivable = _context.TblAccounts.Where(x => x.AccountCode == receivableExist.ReceivableId.ToString() && x.AccountTitle == receivableExist.ReceivableName && x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
                     // Edit Double Entry of Receivable (DR) and Sale Contract Account (CR)
 
-                    var accountTransactionExist = _context.AccountTransaction.Where(x => x.AccountCreditCode == tblAccountSaleContractExist.AccountCode && x.AccountCreditId == tblAccountSaleContractExist.AccountId).FirstOrDefault();
+                    var accountTransactionExist = _context.AccountTransactions.Where(x => x.AccountCreditCode == tblAccountSaleContractExist.AccountCode && x.AccountCreditId == tblAccountSaleContractExist.AccountId).FirstOrDefault();
 
-                    accountTransactionExist.Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault();
+                    accountTransactionExist.Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault();
                     accountTransactionExist.AccountDebitId = tblAccountReceivable.AccountId;
                     accountTransactionExist.AccountCreditId = tblAccountSaleContractExist.AccountId;
                     accountTransactionExist.AccountDebitCode = tblAccountReceivable.AccountCode;
@@ -120,7 +120,7 @@ namespace HussainExport.API.Controllers
 
                     //AccountTransaction accountTransaction = new AccountTransaction()
                     //{
-                    //    Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
+                    //    Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
                     //    AccountDebitId = tblAccountReceivable.AccountId,
                     //    AccountCreditId = tblAccountSaleContract.AccountId,
                     //    AccountDebitCode = tblAccountReceivable.AccountCode,
@@ -155,15 +155,15 @@ namespace HussainExport.API.Controllers
         [HttpPost]
         public async Task<ActionResult<SaleContract>> PostSaleContract(SaleContract saleContract)
         {
-            _context.SaleContract.Add(saleContract);
+            _context.SaleContracts.Add(saleContract);
             await _context.SaveChangesAsync();
 
-            var receivableExist = _context.Receivable.Where(x => x.CustomerId == saleContract.CustomerId && x.IsActive==true).FirstOrDefault();
-            //var payableExist = _context.Payable.Where(x => x.PayableName == saleContract.SaleContractNumber && x.IsActive==true).FirstOrDefault();
+            var receivableExist = _context.Receivables.Where(x => x.CustomerId == saleContract.CustomerId && x.IsActive==true).FirstOrDefault();
+            //var payableExist = _context.Payables.Where(x => x.PayableName == saleContract.SaleContractNumber && x.IsActive==true).FirstOrDefault();
 
             if (receivableExist != null)
             {
-                //var tblAccountSaleContractExist = _context.TblAccount.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == saleContract.SaleContractId);
+                //var tblAccountSaleContractExist = _context.TblAccounts.Where(x => x.AccountCode == saleContract.SaleContractNumber && x.PayableId == saleContract.SaleContractId);
 
                 //Add Payable
                 Payable payable = new Payable()
@@ -175,7 +175,7 @@ namespace HussainExport.API.Controllers
                     PayableName = saleContract.SaleContractNumber,
                     PayablePhone = receivableExist.ReceivablePhone
                 };
-                _context.Payable.Add(payable);
+                _context.Payables.Add(payable);
                 await _context.SaveChangesAsync();
 
 
@@ -185,12 +185,12 @@ namespace HussainExport.API.Controllers
                     AccountCode = saleContract.SaleContractNumber,
                     AccountDescription = saleContract.SaleContractNumber,
                     AccountTitle = saleContract.SaleContractNumber,
-                    AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault(),
+                    AccountTypeId = _context.AccountTypes.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault(),
                     DateAdded = DateTime.Now,
                     IsActive = true,
                     PayableId = payable.PayableId
                 };
-                _context.TblAccount.Add(tblAccountSaleContract);
+                _context.TblAccounts.Add(tblAccountSaleContract);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -200,7 +200,7 @@ namespace HussainExport.API.Controllers
                     var x = 0;
                 }
 
-                var tblAccountReceivableExist = _context.TblAccount.Where(x => x.AccountCode == receivableExist.ReceivableId.ToString() && x.AccountTitle == receivableExist.ReceivableName && x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
+                var tblAccountReceivableExist = _context.TblAccounts.Where(x => x.AccountCode == receivableExist.ReceivableId.ToString() && x.AccountTitle == receivableExist.ReceivableName && x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
                 if (tblAccountReceivableExist == null)
                 {
                     //Add Receiveable Account
@@ -209,18 +209,18 @@ namespace HussainExport.API.Controllers
                         AccountCode = receivableExist.ReceivableId.ToString(),
                         AccountDescription = saleContract.SaleContractNumber,
                         AccountTitle = receivableExist.ReceivableName,
-                        AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Receivables").Select(x => x.AccountTypeId).FirstOrDefault(),
+                        AccountTypeId = _context.AccountTypes.Where(x => x.AccountTypeName == "Receivables").Select(x => x.AccountTypeId).FirstOrDefault(),
                         DateAdded = DateTime.Now,
                         IsActive = true,
                         ReceivablesId = receivableExist.ReceivableId
                     };
-                    _context.TblAccount.Add(tblAccountReceivable);
+                    _context.TblAccounts.Add(tblAccountReceivable);
                     await _context.SaveChangesAsync();
 
                     // Add Double Entry of Receivable (DR) and Sale Contract Account (CR)
                     AccountTransaction accountTransaction = new AccountTransaction()
                     {
-                        Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
+                        Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
                         AccountDebitId = tblAccountReceivable.AccountId,
                         AccountCreditId = tblAccountSaleContract.AccountId,
                         AccountDebitCode = tblAccountReceivable.AccountCode,
@@ -232,7 +232,7 @@ namespace HussainExport.API.Controllers
                         DateAdded = DateTime.Now,
                         IsActive = true
                     };
-                    _context.AccountTransaction.Add(accountTransaction);
+                    _context.AccountTransactions.Add(accountTransaction);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -247,7 +247,7 @@ namespace HussainExport.API.Controllers
                     // Add Double Entry of Receivable (DR) and Sale Contract Account (CR)
                     AccountTransaction accountTransaction = new AccountTransaction()
                     {
-                        Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
+                        Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
                         AccountDebitId = tblAccountReceivableExist.AccountId,
                         AccountCreditId = tblAccountSaleContract.AccountId,
                         AccountDebitCode = tblAccountReceivableExist.AccountCode,
@@ -260,7 +260,7 @@ namespace HussainExport.API.Controllers
                         DateAdded = DateTime.Now,
                         IsActive = true
                     };
-                    _context.AccountTransaction.Add(accountTransaction);
+                    _context.AccountTransactions.Add(accountTransaction);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -275,7 +275,7 @@ namespace HussainExport.API.Controllers
             if (receivableExist == null)
             {
                 //Add Receiveable
-                var customer = await _context.Customer.FindAsync(saleContract.CustomerId);
+                var customer = await _context.Customers.FindAsync(saleContract.CustomerId);
                 Receivable receivable = new Receivable()
                 {
                     CustomerId = customer.CustomerId,
@@ -286,7 +286,7 @@ namespace HussainExport.API.Controllers
                     ReceivableName = customer.CustomerName,
                     ReceivablePhone = customer.Contact
                 };
-                _context.Receivable.Add(receivable);
+                _context.Receivables.Add(receivable);
                 await _context.SaveChangesAsync();
 
                 //Add Payable
@@ -299,7 +299,7 @@ namespace HussainExport.API.Controllers
                     PayableName = saleContract.SaleContractNumber,
                     PayablePhone = customer.Contact
                 };
-                _context.Payable.Add(payable);
+                _context.Payables.Add(payable);
                 await _context.SaveChangesAsync();
 
                 //Add Receiveable Account
@@ -308,12 +308,12 @@ namespace HussainExport.API.Controllers
                     AccountCode = receivable.ReceivableId.ToString(),
                     AccountDescription = saleContract.SaleContractNumber,
                     AccountTitle = receivable.ReceivableName,
-                    AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Receivables").Select(x => x.AccountTypeId).FirstOrDefault(),
+                    AccountTypeId = _context.AccountTypes.Where(x => x.AccountTypeName == "Receivables").Select(x => x.AccountTypeId).FirstOrDefault(),
                     DateAdded = DateTime.Now,
                     IsActive = true,
                     ReceivablesId = receivable.ReceivableId
                 };
-                _context.TblAccount.Add(tblAccountReceivable);
+                _context.TblAccounts.Add(tblAccountReceivable);
 
                 // Add Sale Contract Account
                 TblAccount tblAccountSaleContract = new TblAccount()
@@ -321,19 +321,19 @@ namespace HussainExport.API.Controllers
                     AccountCode = saleContract.SaleContractNumber,
                     AccountDescription = saleContract.SaleContractNumber,
                     AccountTitle = saleContract.SaleContractNumber,
-                    AccountTypeId = _context.AccountType.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault(),
+                    AccountTypeId = _context.AccountTypes.Where(x => x.AccountTypeName == "Liabilities").Select(x => x.AccountTypeId).FirstOrDefault(),
                     DateAdded = DateTime.Now,
                     IsActive = true,
                     PayableId = payable.PayableId
                 };
-                _context.TblAccount.Add(tblAccountSaleContract);
+                _context.TblAccounts.Add(tblAccountSaleContract);
 
                 await _context.SaveChangesAsync();
 
                 // Add Double Entry of Receivable (DR) and Sale Contract Account (CR)
                 AccountTransaction accountTransaction = new AccountTransaction()
                 {
-                    Type = _context.TransactionType.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
+                    Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
                     AccountDebitId = tblAccountReceivable.AccountId,
                     AccountCreditId = tblAccountSaleContract.AccountId,
                     AccountDebitCode = tblAccountReceivable.AccountCode,
@@ -347,7 +347,7 @@ namespace HussainExport.API.Controllers
                     IsActive = true
                 };
 
-                _context.AccountTransaction.Add(accountTransaction);
+                _context.AccountTransactions.Add(accountTransaction);
                 await _context.SaveChangesAsync();
             }
 
@@ -359,13 +359,13 @@ namespace HussainExport.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<SaleContract>> DeleteSaleContract(long id)
         {
-            var saleContract = await _context.SaleContract.FindAsync(id);
+            var saleContract = await _context.SaleContracts.FindAsync(id);
             if (saleContract == null)
             {
                 return NotFound();
             }
 
-            _context.SaleContract.Remove(saleContract);
+            _context.SaleContracts.Remove(saleContract);
             await _context.SaveChangesAsync();
 
             return saleContract;
@@ -373,7 +373,7 @@ namespace HussainExport.API.Controllers
 
         private bool SaleContractExists(long id)
         {
-            return _context.SaleContract.Any(e => e.SaleContractId == id);
+            return _context.SaleContracts.Any(e => e.SaleContractId == id);
         }
     }
 }

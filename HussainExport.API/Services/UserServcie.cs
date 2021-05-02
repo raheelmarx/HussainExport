@@ -26,7 +26,7 @@ namespace HussainExport.API.Services
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var _User = _context.User.SingleOrDefault(x => x.UserName == model.UserName && x.Password == model.Password);
+            var _User = _context.Users.SingleOrDefault(x => x.UserName == model.UserName && x.Password == model.Password);
 
             // return null if TblUser not found
             if (_User == null) return null;
@@ -39,12 +39,12 @@ namespace HussainExport.API.Services
 
         public IEnumerable<User> GetAll()
         {
-            return _context.User;
+            return _context.Users;
         }
 
         public User GetById(int id)
         {
-            return _context.User.FirstOrDefault(x => x.Id == id);
+            return _context.Users.FirstOrDefault(x => x.Id == id);
         }
 
         // helper methods

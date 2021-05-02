@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class Purchase
     {
         public Purchase()
         {
-            PurchaseReceived = new HashSet<PurchaseReceived>();
+            PurchaseReceiveds = new HashSet<PurchaseReceived>();
         }
 
         public long PurchaseId { get; set; }
@@ -26,6 +28,6 @@ namespace HussainExport.API.Entities
         public bool? IsActive { get; set; }
 
         public virtual Payable Payable { get; set; }
-        public virtual ICollection<PurchaseReceived> PurchaseReceived { get; set; }
+        public virtual ICollection<PurchaseReceived> PurchaseReceiveds { get; set; }
     }
 }

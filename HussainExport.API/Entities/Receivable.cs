@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class Receivable
     {
         public Receivable()
         {
-            TblAccount = new HashSet<TblAccount>();
+            TblAccounts = new HashSet<TblAccount>();
         }
 
         public long ReceivableId { get; set; }
@@ -21,6 +23,6 @@ namespace HussainExport.API.Entities
         public bool? IsActive { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual ICollection<TblAccount> TblAccount { get; set; }
+        public virtual ICollection<TblAccount> TblAccounts { get; set; }
     }
 }

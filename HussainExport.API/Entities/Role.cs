@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class Role
     {
         public Role()
         {
-            User = new HashSet<User>();
+            Users = new HashSet<User>();
         }
 
         public long Id { get; set; }
@@ -16,6 +18,6 @@ namespace HussainExport.API.Entities
         public DateTime? DateAdded { get; set; }
         public DateTime? DateUpdated { get; set; }
 
-        public virtual ICollection<User> User { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

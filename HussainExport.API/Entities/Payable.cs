@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class Payable
     {
         public Payable()
         {
-            Purchase = new HashSet<Purchase>();
-            TblAccount = new HashSet<TblAccount>();
+            Purchases = new HashSet<Purchase>();
+            TblAccounts = new HashSet<TblAccount>();
         }
 
         public long PayableId { get; set; }
@@ -20,7 +22,7 @@ namespace HussainExport.API.Entities
         public DateTime? DateUpdated { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual ICollection<Purchase> Purchase { get; set; }
-        public virtual ICollection<TblAccount> TblAccount { get; set; }
+        public virtual ICollection<Purchase> Purchases { get; set; }
+        public virtual ICollection<TblAccount> TblAccounts { get; set; }
     }
 }

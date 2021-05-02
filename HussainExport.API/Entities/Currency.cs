@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class Currency
     {
         public Currency()
         {
-            SaleContract = new HashSet<SaleContract>();
+            SaleContracts = new HashSet<SaleContract>();
         }
 
         public int CurrencyId { get; set; }
@@ -18,6 +20,6 @@ namespace HussainExport.API.Entities
         public DateTime? DateAdded { get; set; }
         public DateTime? DateUpdated { get; set; }
 
-        public virtual ICollection<SaleContract> SaleContract { get; set; }
+        public virtual ICollection<SaleContract> SaleContracts { get; set; }
     }
 }

@@ -24,14 +24,14 @@ namespace HussainExport.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FabricPurchaseItem>>> GetFabricPurchaseItem()
         {
-            return await _context.FabricPurchaseItem.ToListAsync();
+            return await _context.FabricPurchaseItems.ToListAsync();
         }
 
         // GET: api/FabricPurchaseItem/5
         [HttpGet("{id}")]
         public async Task<ActionResult<FabricPurchaseItem>> GetFabricPurchaseItem(long id)
         {
-            var fabricPurchaseItem = await _context.FabricPurchaseItem.FindAsync(id);
+            var fabricPurchaseItem = await _context.FabricPurchaseItems.FindAsync(id);
 
             if (fabricPurchaseItem == null)
             {
@@ -77,7 +77,7 @@ namespace HussainExport.API.Controllers
         [HttpPost]
         public async Task<ActionResult<FabricPurchaseItem>> PostFabricPurchaseItem(FabricPurchaseItem fabricPurchaseItem)
         {
-            _context.FabricPurchaseItem.Add(fabricPurchaseItem);
+            _context.FabricPurchaseItems.Add(fabricPurchaseItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetFabricPurchaseItem", new { id = fabricPurchaseItem.FabricPurchaseItemId }, fabricPurchaseItem);
@@ -87,13 +87,13 @@ namespace HussainExport.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFabricPurchaseItem(long id)
         {
-            var fabricPurchaseItem = await _context.FabricPurchaseItem.FindAsync(id);
+            var fabricPurchaseItem = await _context.FabricPurchaseItems.FindAsync(id);
             if (fabricPurchaseItem == null)
             {
                 return NotFound();
             }
 
-            _context.FabricPurchaseItem.Remove(fabricPurchaseItem);
+            _context.FabricPurchaseItems.Remove(fabricPurchaseItem);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +101,7 @@ namespace HussainExport.API.Controllers
 
         private bool FabricPurchaseItemExists(long id)
         {
-            return _context.FabricPurchaseItem.Any(e => e.FabricPurchaseItemId == id);
+            return _context.FabricPurchaseItems.Any(e => e.FabricPurchaseItemId == id);
         }
     }
 }

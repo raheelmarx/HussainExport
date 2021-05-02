@@ -24,14 +24,14 @@ namespace HussainExport.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Unit>>> GetUnit()
         {
-            return await _context.Unit.ToListAsync();
+            return await _context.Units.ToListAsync();
         }
 
         // GET: api/Units/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Unit>> GetUnit(int id)
         {
-            var unit = await _context.Unit.FindAsync(id);
+            var unit = await _context.Units.FindAsync(id);
 
             if (unit == null)
             {
@@ -79,7 +79,7 @@ namespace HussainExport.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Unit>> PostUnit(Unit unit)
         {
-            _context.Unit.Add(unit);
+            _context.Units.Add(unit);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUnit", new { id = unit.UnitId }, unit);
@@ -89,13 +89,13 @@ namespace HussainExport.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unit>> DeleteUnit(int id)
         {
-            var unit = await _context.Unit.FindAsync(id);
+            var unit = await _context.Units.FindAsync(id);
             if (unit == null)
             {
                 return NotFound();
             }
 
-            _context.Unit.Remove(unit);
+            _context.Units.Remove(unit);
             await _context.SaveChangesAsync();
 
             return unit;
@@ -103,7 +103,7 @@ namespace HussainExport.API.Controllers
 
         private bool UnitExists(int id)
         {
-            return _context.Unit.Any(e => e.UnitId == id);
+            return _context.Units.Any(e => e.UnitId == id);
         }
     }
 }

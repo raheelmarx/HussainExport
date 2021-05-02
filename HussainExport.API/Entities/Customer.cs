@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class Customer
     {
         public Customer()
         {
-            Receivable = new HashSet<Receivable>();
-            SaleContract = new HashSet<SaleContract>();
+            Receivables = new HashSet<Receivable>();
+            SaleContracts = new HashSet<SaleContract>();
         }
 
         public long CustomerId { get; set; }
@@ -22,7 +24,7 @@ namespace HussainExport.API.Entities
         public DateTime? DateAdded { get; set; }
         public DateTime? DateUpdated { get; set; }
 
-        public virtual ICollection<Receivable> Receivable { get; set; }
-        public virtual ICollection<SaleContract> SaleContract { get; set; }
+        public virtual ICollection<Receivable> Receivables { get; set; }
+        public virtual ICollection<SaleContract> SaleContracts { get; set; }
     }
 }

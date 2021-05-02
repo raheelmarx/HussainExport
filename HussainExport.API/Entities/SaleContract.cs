@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class SaleContract
     {
         public SaleContract()
         {
-            AccountTransaction = new HashSet<AccountTransaction>();
-            FabricPurchase = new HashSet<FabricPurchase>();
-            SaleContractItem = new HashSet<SaleContractItem>();
+            AccountTransactions = new HashSet<AccountTransaction>();
+            FabricPurchases = new HashSet<FabricPurchase>();
+            SaleContractItems = new HashSet<SaleContractItem>();
         }
 
         public long SaleContractId { get; set; }
@@ -27,8 +29,8 @@ namespace HussainExport.API.Entities
 
         public virtual Currency Currency { get; set; }
         public virtual Customer Customer { get; set; }
-        public virtual ICollection<AccountTransaction> AccountTransaction { get; set; }
-        public virtual ICollection<FabricPurchase> FabricPurchase { get; set; }
-        public virtual ICollection<SaleContractItem> SaleContractItem { get; set; }
+        public virtual ICollection<AccountTransaction> AccountTransactions { get; set; }
+        public virtual ICollection<FabricPurchase> FabricPurchases { get; set; }
+        public virtual ICollection<SaleContractItem> SaleContractItems { get; set; }
     }
 }

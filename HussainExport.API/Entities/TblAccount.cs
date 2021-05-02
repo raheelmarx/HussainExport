@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class TblAccount
     {
         public TblAccount()
         {
-            AccountTransactionAccountCredit = new HashSet<AccountTransaction>();
-            AccountTransactionAccountDebit = new HashSet<AccountTransaction>();
+            AccountTransactionAccountCredits = new HashSet<AccountTransaction>();
+            AccountTransactionAccountDebits = new HashSet<AccountTransaction>();
         }
 
         public long AccountId { get; set; }
@@ -25,7 +27,7 @@ namespace HussainExport.API.Entities
         public virtual AccountType AccountType { get; set; }
         public virtual Payable Payable { get; set; }
         public virtual Receivable Receivables { get; set; }
-        public virtual ICollection<AccountTransaction> AccountTransactionAccountCredit { get; set; }
-        public virtual ICollection<AccountTransaction> AccountTransactionAccountDebit { get; set; }
+        public virtual ICollection<AccountTransaction> AccountTransactionAccountCredits { get; set; }
+        public virtual ICollection<AccountTransaction> AccountTransactionAccountDebits { get; set; }
     }
 }

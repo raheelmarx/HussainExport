@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace HussainExport.API.Entities
 {
     public partial class AccountTransaction
     {
         public AccountTransaction()
         {
-            Assets = new HashSet<Assets>();
-            Inventory = new HashSet<Inventory>();
-            OwnerEquity = new HashSet<OwnerEquity>();
+            Assets = new HashSet<Asset>();
+            Inventories = new HashSet<Inventory>();
+            OwnerEquities = new HashSet<OwnerEquity>();
         }
 
         public long AccountTransactionId { get; set; }
@@ -33,8 +35,8 @@ namespace HussainExport.API.Entities
         public virtual TblAccount AccountDebit { get; set; }
         public virtual SaleContract SaleContract { get; set; }
         public virtual TransactionType TypeNavigation { get; set; }
-        public virtual ICollection<Assets> Assets { get; set; }
-        public virtual ICollection<Inventory> Inventory { get; set; }
-        public virtual ICollection<OwnerEquity> OwnerEquity { get; set; }
+        public virtual ICollection<Asset> Assets { get; set; }
+        public virtual ICollection<Inventory> Inventories { get; set; }
+        public virtual ICollection<OwnerEquity> OwnerEquities { get; set; }
     }
 }
