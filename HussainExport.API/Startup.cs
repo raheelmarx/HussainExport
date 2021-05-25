@@ -68,7 +68,7 @@ namespace HussainExport.API
                      {
                          ValidateIssuer = false,
                          ValidateAudience = false,
-                         ValidateLifetime = true,
+                         ValidateLifetime = false,
                          ValidateIssuerSigningKey = true,
                          //ValidIssuer = issuer,
                          //ValidAudience = audience,
@@ -95,6 +95,8 @@ namespace HussainExport.API
             services.AddAuthorization();
 
             services.AddMvc();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
         }
 

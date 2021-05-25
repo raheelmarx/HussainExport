@@ -20,15 +20,25 @@ namespace HussainExport.Client.Helpers
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            var userToken = context.HttpContext.Session.GetString("token");
-            if (context.HttpContext.Session.GetString("token") == null)
+            Controller controller = context.Controller as Controller;
+            var token = controller.TempData.Peek("Token").ToString();
+            if (token != null)
             {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                {
+                    controller = "Home",
+                    action = "Index",
+                    returnurl = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetEncodedUrl(context.HttpContext.Request)
+                }));
                 //context.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 //{
-                //    controller = "Home",
-                //    action = "Index",
+                //    controller = "User",
+                //    action = "SignIn",
                 //    returnurl = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetEncodedUrl(context.HttpContext.Request)
                 //}));
+            }
+            else
+            {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 {
                     controller = "User",
@@ -36,15 +46,6 @@ namespace HussainExport.Client.Helpers
                     returnurl = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetEncodedUrl(context.HttpContext.Request)
                 }));
             }
-            //else
-            //{
-            //    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new
-            //    {
-            //        controller = "User",
-            //        action = "SignIn",
-            //        returnurl = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetEncodedUrl(context.HttpContext.Request)
-            //    }));
-            //}
         }
     }
 }

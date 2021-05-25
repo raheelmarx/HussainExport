@@ -40,13 +40,13 @@
                     <!-- /.card-header -->
                     <div class="card-body">
 
-                        <table class="table table-bordered table-striped">
+                        <table  id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>
-                                        @Html.Label("Sale Contract ID")
+                                        @Html.Label("Sale Contract Number")
                                     </th>
-                                    <th>
+                                    @*<th>
                                         @Html.Label("Quality")
                                     </th>
                                     <th>
@@ -57,7 +57,7 @@
                                     </th>
                                     <th>
                                         @Html.Label("Size")
-                                    </th>
+                                    </th>*@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Price)
                                     </th>
@@ -76,9 +76,9 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.DateUpdated)
                                         </th>*@
-                                    <th>
+                                    @*<th>
                                         @Html.Label("Sale Contract")
-                                    </th>
+                                    </th>*@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Unit)
                                     </th>
@@ -86,7 +86,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var group in Model.GroupBy(item => item.SaleContract))
+                                @foreach (var group in Model.GroupBy(item => item.SaleContract.SaleContractNumber))
                                 {
 
                                     @foreach (var item in group)
@@ -94,10 +94,10 @@
                                         <tr>
                                             <td>
                                                 @*@Html.Encode(group.Key)*@
-                                                @Html.DisplayFor(modelItem => item.SaleContractId)
+                                                @Html.DisplayFor(modelItem => item.SaleContract.SaleContractNumber)
                                             </td>
 
-                                            <td>
+                                            @*<td>
                                                 @Html.DisplayFor(modelItem => item.Quality)
                                             </td>
                                             <td>
@@ -108,7 +108,7 @@
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Size)
-                                            </td>
+                                            </td>*@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Price)
                                             </td>
@@ -127,11 +127,11 @@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.DateUpdated)
                                                 </td>*@
-                                            <td>
+                                            @*<td>
                                                 @Html.DisplayFor(modelItem => item.SaleContract.SaleContractNumber)
-                                            </td>
+                                            </td>*@
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Unit.UnitId)
+                                                @Html.DisplayFor(modelItem => item.Unit.UnitName)
                                             </td>
                                             <td>
                                                 <a asp-action="Edit" asp-route-id="@item.SaleContractItemId">Edit</a> |
@@ -157,3 +157,17 @@
 </section>
 <!-- /.content -->
 <!-- Page specific script -->
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            "paging": true,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+       
+    });</script>

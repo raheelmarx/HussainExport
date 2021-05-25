@@ -56,15 +56,15 @@
                             <div class="col-md-4">
                                 <span class="col-md-6">
                                     @Html.DisplayFor(model => model.SaleContractNumber)<br />
-                                    @DateTime.Now
+                                    @DateTime.Now.ToString("dd-MMM-yyyy")
                                 </span>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="text-center" style="font-size: small;">
                             <br />
-                            <p>Through negotiation, Party A and Party B enter into this contract, whereby Party B agrees to buy goods listed below on the A terms and conditions stipulated below. This contract should be executed in two counterparts with each of the parties hereto holding one. The Copies delivered through telefax/email shall be as valid as original. This contract must be signed and stamped back to us within 3 working days.</p>
-                        </div>
+                             @Html.DisplayFor(model => model.Description)<br />
+                             </div>
                         <div style="font-size: small; font-weight:bolder">
                             <br />
                             <p>Good's Construction, description, price and quantity:</p>
@@ -157,7 +157,7 @@
 
                             <tbody>
 
-                                @foreach (var item in Model.SaleContractItem)
+                                @foreach (var item in Model.SaleContractItems)
                                 {
 
                                     <tr>
@@ -198,14 +198,16 @@
                         </table>
                         <div class="text-center" style="font-size: small; font-weight:bolder;">
                             <span class="row">
-                                <div class="col-md-6"> Total Fabric: 65,000 mtrs</div>
+                                <div class="col-md-6"> Total Fabric:  @Html.DisplayFor(model => model.TotalFabric) mtrs</div>
                                 <div class="col-md-6"> Total Amount: @Html.DisplayFor(model => model.TotalAmount)</div>
                             </span>
                         </div>
                         <div class="col-md-12" style="margin-top: 5em;">
                             <div class="row">
-                                <div class="col-md-2"> Tolerance:</div>
-                                <div class="col-md-10"> 10% +/- must be allowed in Quantity & Quality Specification.<br /> 3% +/- Yarn & Density Allow</div>
+                                <div class="col-md-2">@Html.DisplayNameFor(model => model.Tolerance):</div>
+                                <div class="col-md-10">@Html.DisplayFor(model => model.Tolerance)</div>
+
+                                @*<div class="col-md-10"> 10% +/- must be allowed in Quantity & Quality Specification.<br /> 3% +/- Yarn & Density Allow</div>*@
                             </div>
                             <div class="row">
                                 <div class="col-md-2">@Html.DisplayNameFor(model => model.Packing):</div>
@@ -216,11 +218,19 @@
                                 <div class="col-md-10"> @Html.DisplayFor(model => model.ShipmentDetails)</div>
                             </div>
                             <div class="row">
+                                <div class="col-md-2"> @Html.DisplayNameFor(model => model.PaymentTerms):</div>
+                                <div class="col-md-10"> @Html.DisplayFor(model => model.PaymentTerms)</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2"> @Html.DisplayNameFor(model => model.DeliverySchedule):</div>
+                                <div class="col-md-10"> @Html.DisplayFor(model => model.DeliverySchedule)</div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-2"> Bank Details:</div>
                                 <div class="col-md-10">
-                                    Account No. 0665-0010063938330017 <br />
-                                    in the name of M/S; HUSSAIN EXPORTS. Allied Bank Ltd., Pakistan. Swift Code:<br />
-                                    ABPAPKKAXXX
+                                   Account No.  @Html.DisplayFor(model => model.BankDetailsNavigation.AccountNo) (IBAN: @Html.DisplayFor(model => model.BankDetailsNavigation.Iban))
+                                    in the name of @Html.DisplayFor(model => model.BankDetailsNavigation.Title) @Html.DisplayFor(model => model.BankDetailsNavigation.BankName)
+                                    Swift Code: @Html.DisplayFor(model => model.BankDetailsNavigation.SwiftCode)
                                 </div>
                             </div>
                             <div class="row">

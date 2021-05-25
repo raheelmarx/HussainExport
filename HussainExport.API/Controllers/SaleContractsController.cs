@@ -13,7 +13,7 @@ namespace HussainExport.API.Controllers
 {
     
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class SaleContractsController : ControllerBase
     {
@@ -28,7 +28,16 @@ namespace HussainExport.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SaleContract>>> GetSaleContract()
         {
-            return await _context.SaleContracts.ToListAsync();
+            try
+            {
+                 var data =  await _context.SaleContracts.OrderByDescending(x => x.SaleContractId).Include(f => f.Customer).ToListAsync();
+                return data;
+            }
+            catch(Exception ex)
+            {
+                return null;
+
+            }
         }
 
         // GET: api/SaleContracts/5
@@ -101,7 +110,7 @@ namespace HussainExport.API.Controllers
                     var tblAccountReceivable = _context.TblAccounts.Where(x => x.AccountCode == receivableExist.ReceivableId.ToString() && x.AccountTitle == receivableExist.ReceivableName && x.ReceivablesId == receivableExist.ReceivableId).FirstOrDefault();
                     // Edit Double Entry of Receivable (DR) and Sale Contract Account (CR)
 
-                    var accountTransactionExist = _context.AccountTransactions.Where(x => x.AccountCreditCode == tblAccountSaleContractExist.AccountCode && x.AccountCreditId == tblAccountSaleContractExist.AccountId).FirstOrDefault();
+                    var accountTransactionExist = _context.AccountTransactions.Where(x => x.AccountCreditCode == tblAccountSaleContractExist.AccountCode && x.AccountCreditId == tblAccountSaleContractExist.AccountId && x.Type == _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault()).FirstOrDefault();
 
                     accountTransactionExist.Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault();
                     accountTransactionExist.AccountDebitId = tblAccountReceivable.AccountId;
@@ -112,7 +121,7 @@ namespace HussainExport.API.Controllers
                     accountTransactionExist.AmountDebit = saleContract.TotalAmount;
                     accountTransactionExist.AmountCredit = saleContract.TotalAmount;
                     accountTransactionExist.SaleContractNumber = saleContract.SaleContractNumber;
-                    accountTransactionExist.DateAdded = DateTime.Now;
+                    accountTransactionExist.DateUpdated = DateTime.Now;
                     accountTransactionExist.IsActive = true;
 
                     _context.Entry(accountTransactionExist).State = EntityState.Modified;

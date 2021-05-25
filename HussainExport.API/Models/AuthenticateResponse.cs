@@ -13,7 +13,7 @@ namespace HussainExport.API.Models
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Token { get; set; }
-
+        public long? RoleId { get; set; }
 
         public AuthenticateResponse(User user, string token)
         {
@@ -22,6 +22,7 @@ namespace HussainExport.API.Models
             LastName = user.LastName;
             Username = user.UserName;
             Token = token;
+            RoleId = user.RoleId;
         }
     }
 }

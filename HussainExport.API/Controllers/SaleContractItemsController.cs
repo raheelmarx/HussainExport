@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HussainExport.API.Entities;
+using HussainExport.API.Helpers;
 
 namespace HussainExport.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SaleContractItemsController : ControllerBase
     {
         private readonly HEDBContext _context;
@@ -25,7 +27,7 @@ namespace HussainExport.API.Controllers
         //public async Task<ActionResult<IEnumerable<SaleContractItem>>> GetSaleContractItem()
         public async Task<ActionResult<IEnumerable<SaleContractItem>>> GetSaleContractItem()
         {
-            return await _context.SaleContractItems.ToListAsync();
+            return await _context.SaleContractItems.OrderByDescending(x => x.SaleContractId).Include(x => x.SaleContract).Include(x => x.Unit).ToListAsync();
            //var data =   _context.SaleContractItems.Include(x => x.SaleContract).ToList();
            // return data;
         }
@@ -94,6 +96,14 @@ namespace HussainExport.API.Controllers
             {
                 saleContract.TotalAmount = saleContract.TotalAmount + item.Amount;
             }
+
+            decimal? TotalFabric = 0;
+            foreach (var item in allSaleContractItems)
+            {
+                TotalFabric  = TotalFabric + item.Quantity;
+            }
+            saleContract.TotalFabric = TotalFabric.ToString();
+
             _context.Entry(saleContract).State = EntityState.Modified;
             try
             {
@@ -157,7 +167,25 @@ namespace HussainExport.API.Controllers
                 await _context.SaveChangesAsync();
                 // Add/Update Sale Contract Total Amount
                 var saleContract = await _context.SaleContracts.FindAsync(saleContractItem.SaleContractId);
-                saleContract.TotalAmount = saleContract.TotalAmount + saleContractItem.Amount;
+
+
+                decimal? TotalAmount = 0;
+                if(saleContract.TotalAmount!=null && saleContract.TotalAmount!=0)
+                {
+                    TotalAmount = saleContract.TotalAmount;
+                }
+                TotalAmount = TotalAmount + saleContractItem.Amount;
+                saleContract.TotalAmount = TotalAmount;
+
+                var allSaleContractItems = _context.SaleContractItems.Where(x => x.SaleContractId == saleContractItem.SaleContractId).ToList();
+
+                decimal? TotalFabric = 0;
+                foreach (var item in allSaleContractItems)
+                {
+                    TotalFabric = TotalFabric + item.Quantity;
+                }
+                saleContract.TotalFabric = TotalFabric.ToString();
+
                 _context.Entry(saleContract).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 

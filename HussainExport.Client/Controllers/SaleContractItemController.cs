@@ -40,7 +40,8 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
 
             HttpResponseMessage res = await client.GetAsync("api/SaleContractItems");
 
@@ -76,7 +77,8 @@ namespace HussainExport.Client.Controllers
 
             SaleContractItemVM saleContractItemVM = new SaleContractItemVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/SaleContractItems/" + id);
 
             if (res.StatusCode == HttpStatusCode.Unauthorized)
@@ -128,7 +130,8 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
 
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts");
 
@@ -196,7 +199,8 @@ namespace HussainExport.Client.Controllers
             {
                 saleContractItemVM.IsActive = true;
                 saleContractItemVM.DateAdded = DateTime.Now;
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
                 var content = new StringContent(JsonConvert.SerializeObject(saleContractItemVM), Encoding.UTF8, "application/json");
                 //Task has been cancelled exception occured here, and Api method never hits while debugging
                 HttpResponseMessage res1 = client.PostAsync("api/SaleContractItems", content).Result;
@@ -211,7 +215,7 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts");
 
@@ -238,7 +242,7 @@ namespace HussainExport.Client.Controllers
             List<UnitVM> unitVM = new List<UnitVM>();
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage res2 = await client.GetAsync("api/Units");
 
@@ -282,7 +286,8 @@ namespace HussainExport.Client.Controllers
 
             SaleContractItemVM saleContractItemVM = new SaleContractItemVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res1 = await client.GetAsync("api/SaleContractItems/" + id);
 
             if (res1.IsSuccessStatusCode)
@@ -301,7 +306,7 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts");
 
@@ -328,7 +333,7 @@ namespace HussainExport.Client.Controllers
             List<UnitVM> unitVM = new List<UnitVM>();
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage res2 = await client.GetAsync("api/Units");
 
@@ -385,7 +390,8 @@ namespace HussainExport.Client.Controllers
                 {
                     saleContractItemVM.IsActive = true;
                     saleContractItemVM.DateUpdated = DateTime.Now;
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
                     var content = new StringContent(JsonConvert.SerializeObject(saleContractItemVM), Encoding.UTF8, "application/json");
                     HttpResponseMessage res1 = client.PutAsync("api/SaleContractItems/" + id, content).Result;
                     if (res1.IsSuccessStatusCode)
@@ -412,7 +418,7 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts");
 
@@ -439,7 +445,7 @@ namespace HussainExport.Client.Controllers
             List<UnitVM> unitVM = new List<UnitVM>();
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage res2 = await client.GetAsync("api/Units");
 
@@ -502,7 +508,8 @@ namespace HussainExport.Client.Controllers
 
             SaleContractItemVM saleContractItemVM = new SaleContractItemVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/SaleContractItems/" + id);
 
             if (res.IsSuccessStatusCode)
@@ -538,7 +545,8 @@ namespace HussainExport.Client.Controllers
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = client.DeleteAsync($"api/SaleContractItems/{id}").Result;
             if (res.IsSuccessStatusCode)
             {
@@ -560,7 +568,8 @@ namespace HussainExport.Client.Controllers
 
             SaleContractItemVM saleContractItemVM = new SaleContractItemVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/SaleContractItems/" + id);
 
             if (res.IsSuccessStatusCode)

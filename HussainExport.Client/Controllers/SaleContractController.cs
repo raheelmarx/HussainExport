@@ -40,12 +40,12 @@ namespace HussainExport.Client.Controllers
 
             var contentType = new MediaTypeWithQualityHeaderValue(@"application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            var token = TempData.Peek("Token").ToString();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JsonConvert.SerializeObject(token, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
 
-            //client.DefaultRequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MTcyMjE2MDEsImV4cCI6MTYxNzgyNjQwMSwiaWF0IjoxNjE3MjIxNjAxfQ.q-5ic_D3lYkCsftS8Dr2qUjsmxkSqq-22hq-GpxC9QU");
+            //client.DefaultRequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MjA2OTExOTAsImV4cCI6MTYyMTI5NTk5MCwiaWF0IjoxNjIwNjkxMTkwfQ.u7skOPpc-KD_Lp-F3zq5P12CJaVQI5X4QCfPUbC_sLw");
 
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts");
 
@@ -100,7 +100,8 @@ namespace HussainExport.Client.Controllers
 
             SaleContractVM saleContractVM = new SaleContractVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts/" + id);
 
             if (res.StatusCode == HttpStatusCode.Unauthorized)
@@ -131,7 +132,7 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage res1 = await client.GetAsync("api/SaleContractItems/GetSaleContractItemBySaleContractId/" + id);
 
@@ -153,7 +154,7 @@ namespace HussainExport.Client.Controllers
                 {
                     #region Unit
                     UnitVM unitVM = new UnitVM();
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
                     HttpResponseMessage resUnit = await client.GetAsync("api/Units/" + item.UnitId);
 
                     if (resUnit.StatusCode == HttpStatusCode.Unauthorized)
@@ -185,7 +186,7 @@ namespace HussainExport.Client.Controllers
             //returning the role list to view 
             #endregion
 
-            saleContractVM.SaleContractItem = saleContractItemVM;
+            saleContractVM.SaleContractItems = saleContractItemVM;
             #region Customer Information
             
             CustomerVM customerVM = new CustomerVM();
@@ -248,8 +249,35 @@ namespace HussainExport.Client.Controllers
             saleContractVM.Currency = currencyVM;
             #endregion
 
-            
-            return View(saleContractVM);
+            #region Bank Details
+            BankInfoVM bankInfoVM = new BankInfoVM();
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+            //var content = new StringContent(JsonConvert.SerializeObject(id), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage bankInfoVMRes = await client.GetAsync("api/BankInfo/" + saleContractVM.BankDetails);
+
+            if (bankInfoVMRes.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (bankInfoVMRes.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = bankInfoVMRes.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the Role list    
+                bankInfoVM = JsonConvert.DeserializeObject<BankInfoVM>(result);
+                saleContractVM.BankDetailsNavigation = bankInfoVM;
+            }
+                #endregion Bank Details
+
+                return View(saleContractVM);
             //if (id == null)
             //{
             //    return NotFound();
@@ -277,7 +305,8 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
 
             HttpResponseMessage CurrencyVMsRes = await client.GetAsync("api/Currencies");
 
@@ -326,6 +355,31 @@ namespace HussainExport.Client.Controllers
             }
 
             ViewData["CustomerId"] = new SelectList(customerVM, "CustomerId", "CustomerName");
+
+            List<BankInfoVM> bankInfoVM = new List<BankInfoVM>();
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            //var token = TempData.Peek("Token").ToString();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+            HttpResponseMessage bankInfoVMsRes = await client.GetAsync("api/BankInfo");
+
+            if (bankInfoVMsRes.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (bankInfoVMsRes.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = bankInfoVMsRes.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the role list    
+                bankInfoVM = JsonConvert.DeserializeObject<List<BankInfoVM>>(result);
+
+            }
+            ViewData["BankId"] = new SelectList(bankInfoVM, "Id", "BankName");
             return View();
         }
 
@@ -334,13 +388,27 @@ namespace HussainExport.Client.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleContractId,SaleContractNumber,CustomerId,TotalAmount,CurrencyId,DeliveryTime,ShipmentDetails,Packing,Description,IsActive,DateAdded,DateUpdated")] SaleContractVM saleContractVM)
+        public async Task<IActionResult> Create([Bind("SaleContractId,SaleContractNumber,CustomerId,TotalAmount,TotalFabric,Tolerance,Packing,ShipmentDetails,PaymentTerms,DeliverySchedule,CurrencyId,BankDetails,Description")] SaleContractVM saleContractVM)//,IsActive,DateAdded,DateUpdated
         { 
             HttpClient client = _helperAPI.InitializeClient();
             if (ModelState.IsValid)
             {
+                try
+                {
+                    var userString = TempData.Peek("User").ToString();
+                    var userVM = JsonConvert.DeserializeObject<UserVM>(userString);
+                    saleContractVM.AddedBy = userVM.Id;
+                }
+                catch (Exception ex)
+                {
+                    //saleContractVM.AddedBy = userVM.Id;
+                }
+
+                saleContractVM.DateAdded = DateTime.Now;
                
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
                 var content = new StringContent(JsonConvert.SerializeObject(saleContractVM), Encoding.UTF8, "application/json");
                 //Task has been cancelled exception occured here, and Api method never hits while debugging
                 HttpResponseMessage res = client.PostAsync("api/SaleContracts", content).Result;
@@ -355,7 +423,7 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage CurrencyVMsRes = await client.GetAsync("api/Currencies");
 
@@ -382,7 +450,7 @@ namespace HussainExport.Client.Controllers
 
 
             List<CustomerVM> customerVM = new List<CustomerVM>();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage resCust = await client.GetAsync("api/Customers");
 
@@ -404,6 +472,31 @@ namespace HussainExport.Client.Controllers
             }
 
             ViewData["CustomerId"] = new SelectList(customerVM, "CustomerId", "CustomerName");
+
+            List<BankInfoVM> bankInfoVM = new List<BankInfoVM>();
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            //var token = TempData.Peek("Token").ToString();
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+            HttpResponseMessage bankInfoVMsRes = await client.GetAsync("api/BankInfo");
+
+            if (bankInfoVMsRes.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (bankInfoVMsRes.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = bankInfoVMsRes.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the role list    
+                bankInfoVM = JsonConvert.DeserializeObject<List<BankInfoVM>>(result);
+
+            }
+            ViewData["BankId"] = new SelectList(bankInfoVM, "Id", "BankName");
             return View(saleContractVM);
             //if (ModelState.IsValid)
             //{
@@ -426,7 +519,8 @@ namespace HussainExport.Client.Controllers
 
             SaleContractVM saleContractVM = new SaleContractVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts/" + id);
 
             if (res.IsSuccessStatusCode)
@@ -447,7 +541,7 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage CurrencyVMsRes = await client.GetAsync("api/Currencies");
 
@@ -474,7 +568,7 @@ namespace HussainExport.Client.Controllers
 
 
             List<CustomerVM> customerVM = new List<CustomerVM>();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage resCust = await client.GetAsync("api/Customers");
 
@@ -496,6 +590,31 @@ namespace HussainExport.Client.Controllers
             }
 
             ViewData["CustomerId"] = new SelectList(customerVM, "CustomerId", "CustomerName");
+
+            List<BankInfoVM> bankInfoVM = new List<BankInfoVM>();
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            //var token = TempData.Peek("Token").ToString();
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage bankInfoVMsRes = await client.GetAsync("api/BankInfo");
+
+            if (bankInfoVMsRes.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (bankInfoVMsRes.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = bankInfoVMsRes.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the role list    
+                bankInfoVM = JsonConvert.DeserializeObject<List<BankInfoVM>>(result);
+
+            }
+            ViewData["BankId"] = new SelectList(bankInfoVM, "Id", "BankName");
             #endregion Get DDL
             //Get DDL End
             return View(saleContractVM);
@@ -520,7 +639,7 @@ namespace HussainExport.Client.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("SaleContractId,SaleContractNumber,CustomerId,TotalAmount,CurrencyId,DeliveryTime,ShipmentDetails,Packing,Description,IsActive,DateAdded,DateUpdated")] SaleContractVM saleContractVM)
+        public async Task<IActionResult> Edit(long id, [Bind("SaleContractId,SaleContractNumber,CustomerId,Tolerance,Packing,ShipmentDetails,PaymentTerms,DeliverySchedule,CurrencyId,BankDetails,Description")] SaleContractVM saleContractVM)//TotalAmount,TotalFabric,IsActive,DateAdded,
         {
             HttpClient client = _helperAPI.InitializeClient();
             if (id != saleContractVM.SaleContractId)
@@ -532,8 +651,12 @@ namespace HussainExport.Client.Controllers
             {
                 try
                 {
-                   
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                    var userString = TempData.Peek("User").ToString();
+                    var userVM = JsonConvert.DeserializeObject<UserVM>(userString);
+                    saleContractVM.DateUpdated = DateTime.Now;
+                    saleContractVM.UpdatedBy = userVM.Id;
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
                     var content = new StringContent(JsonConvert.SerializeObject(saleContractVM), Encoding.UTF8, "application/json");
                     HttpResponseMessage res = client.PutAsync("api/SaleContracts/" + id, content).Result;
                     if (res.IsSuccessStatusCode)
@@ -562,7 +685,7 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage CurrencyVMsRes = await client.GetAsync("api/Currencies");
 
@@ -589,7 +712,7 @@ namespace HussainExport.Client.Controllers
 
 
             List<CustomerVM> customerVM = new List<CustomerVM>();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage resCust = await client.GetAsync("api/Customers");
 
@@ -611,6 +734,31 @@ namespace HussainExport.Client.Controllers
             }
 
             ViewData["CustomerId"] = new SelectList(customerVM, "CustomerId", "CustomerName");
+
+            List<BankInfoVM> bankInfoVM = new List<BankInfoVM>();
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+            //var token = TempData.Peek("Token").ToString();
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage bankInfoVMsRes = await client.GetAsync("api/BankInfo");
+
+            if (bankInfoVMsRes.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (bankInfoVMsRes.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = bankInfoVMsRes.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the role list    
+                bankInfoVM = JsonConvert.DeserializeObject<List<BankInfoVM>>(result);
+
+            }
+            ViewData["BankId"] = new SelectList(bankInfoVM, "Id", "BankName");
             #endregion Get DDL
             //Get DDL End
 
@@ -656,7 +804,8 @@ namespace HussainExport.Client.Controllers
 
             SaleContractVM saleContractVM = new SaleContractVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts/" + id);
 
             if (res.IsSuccessStatusCode)
@@ -715,7 +864,8 @@ namespace HussainExport.Client.Controllers
 
             SaleContractVM saleContractVM = new SaleContractVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/SaleContracts/" + id);
 
             if (res.IsSuccessStatusCode)
@@ -741,7 +891,8 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
 
             HttpResponseMessage res = await client.GetAsync("api/Units");
 

@@ -11,6 +11,8 @@ namespace HussainExport.API.Entities
         {
             AccountTransactionAccountCredits = new HashSet<AccountTransaction>();
             AccountTransactionAccountDebits = new HashSet<AccountTransaction>();
+            FactoryOverheadExpenses = new HashSet<FactoryOverheadExpense>();
+            SaleContractExpenses = new HashSet<SaleContractExpense>();
         }
 
         public long AccountId { get; set; }
@@ -29,5 +31,7 @@ namespace HussainExport.API.Entities
         public virtual Receivable Receivables { get; set; }
         public virtual ICollection<AccountTransaction> AccountTransactionAccountCredits { get; set; }
         public virtual ICollection<AccountTransaction> AccountTransactionAccountDebits { get; set; }
+        public virtual ICollection<FactoryOverheadExpense> FactoryOverheadExpenses { get; set; }
+        public virtual ICollection<SaleContractExpense> SaleContractExpenses { get; set; }
     }
 }

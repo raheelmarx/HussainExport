@@ -27,6 +27,7 @@ namespace HussainExport.API.Services
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
             var _User = _context.Users.SingleOrDefault(x => x.UserName == model.UserName && x.Password == model.Password);
+            //var _User = _context.Users.Where(x => x.UserName == model.UserName && x.Password == model.Password).SingleOrDefault();
 
             // return null if TblUser not found
             if (_User == null) return null;

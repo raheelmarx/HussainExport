@@ -38,7 +38,8 @@ namespace HussainExport.Client.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
 
             HttpResponseMessage res = await client.GetAsync("api/Customers");
 
@@ -73,7 +74,8 @@ namespace HussainExport.Client.Controllers
 
             CustomerVM customerVM = new CustomerVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/Customers/" + id);
 
             if (res.StatusCode == HttpStatusCode.Unauthorized)
@@ -128,8 +130,11 @@ namespace HussainExport.Client.Controllers
         {
             if (ModelState.IsValid)
             {
+                customerVM.DateAdded = DateTime.Now;
+                customerVM.IsActive = true;
                 HttpClient client = _helperAPI.InitializeClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
                 var content = new StringContent(JsonConvert.SerializeObject(customerVM), Encoding.UTF8, "application/json");
                 //Task has been cancelled exception occured here, and Api method never hits while debugging
                 HttpResponseMessage res = client.PostAsync("api/Customers", content).Result;
@@ -158,7 +163,8 @@ namespace HussainExport.Client.Controllers
 
             CustomerVM customerVM = new CustomerVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/Customers/" + id);
 
             if (res.IsSuccessStatusCode)
@@ -201,8 +207,10 @@ namespace HussainExport.Client.Controllers
             {
                 try
                 {
+                    customerVM.DateUpdated = DateTime.Now;
                     HttpClient client = _helperAPI.InitializeClient();
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
                     var content = new StringContent(JsonConvert.SerializeObject(customerVM), Encoding.UTF8, "application/json");
                     HttpResponseMessage res = client.PutAsync("api/Customers/" + id, content).Result;
                     if (res.IsSuccessStatusCode)
@@ -262,7 +270,8 @@ namespace HussainExport.Client.Controllers
 
             CustomerVM customerVM = new CustomerVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/Customers/" + id);
 
             if (res.IsSuccessStatusCode)
@@ -297,7 +306,8 @@ namespace HussainExport.Client.Controllers
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = client.DeleteAsync($"api/Customers/{id}").Result;
             if (res.IsSuccessStatusCode)
             {
@@ -319,7 +329,8 @@ namespace HussainExport.Client.Controllers
 
             CustomerVM customerVM = new CustomerVM();
             HttpClient client = _helperAPI.InitializeClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TempData.Peek("Token").ToString());
             HttpResponseMessage res = await client.GetAsync("api/Customers/" + id);
 
             if (res.IsSuccessStatusCode)

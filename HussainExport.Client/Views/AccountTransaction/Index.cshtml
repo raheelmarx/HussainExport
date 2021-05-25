@@ -1,0 +1,196 @@
+﻿@model IEnumerable<HussainExport.Client.Models.AccountTransactionVM>
+
+@{
+    ViewData["Title"] = "General Journal";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"> @ViewData["Title"]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+                        <div class="float-sm-right">
+                            <p>
+                                <a asp-action="Create" class="btn btn-block btn-primary">New Journal Entry</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @*@Html.DisplayNameFor(model => model.DateAdded)*@
+                                        Date
+                                    </th>
+                                    @*<th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+                                    *@
+                                    @*<th>
+            @Html.DisplayNameFor(model => model.VoucherDate)
+        </th>*@
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AccountDebitCode)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AccountCreditCode)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Narration)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AmountDebit)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AmountCredit)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.SaleContractNumber)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VoucherNo)
+                                    </th>
+                                    @*<th>
+            @Html.DisplayNameFor(model => model.DateAdded)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateUpdated)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountCredit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountDebit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SaleContract)
+        </th>*@
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateAdded)
+                                    </td>
+                                    @*<td>
+            @Html.DisplayFor(modelItem => item.TypeNavigation.TransactionTypeName)
+        </td>
+                                    *@
+                                    @*<td>
+            @Html.DisplayFor(modelItem => item.VoucherDate)
+        </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AccountDebit.AccountTitle)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AccountCredit.AccountTitle)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Narration)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AmountDebit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AmountCredit)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SaleContractNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.VoucherNo)
+                                    </td>
+                                    @*<td>
+            @Html.DisplayFor(modelItem => item.DateAdded)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateUpdated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountCredit.AccountId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountDebit.AccountId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SaleContract.SaleContractId)
+        </td>*@
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.AccountTransactionId">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.AccountTransactionId">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.AccountTransactionId">Delete</a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<!-- Page specific script -->
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            "paging": true,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        //$('#example2').DataTable({
+        //    "paging": true,
+        //    "lengthChange": false,
+        //    "searching": true,
+        //    "ordering": true,
+        //    "info": true,
+        //    "autoWidth": false,
+        //    "responsive": true,
+        //});
+    });</script>

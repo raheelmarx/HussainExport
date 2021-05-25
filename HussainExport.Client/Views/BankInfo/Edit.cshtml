@@ -1,0 +1,106 @@
+﻿@model HussainExport.Client.Models.BankInfoVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"> @ViewData["Title"]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form asp-action="Edit">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group">
+                                <label asp-for="Title" class="control-label"></label>
+                                <input asp-for="Title" class="form-control" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="BankName" class="control-label"></label>
+                                <input asp-for="BankName" class="form-control" />
+                                <span asp-validation-for="BankName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AccountNo" class="control-label"></label>
+                                <input asp-for="AccountNo" class="form-control" />
+                                <span asp-validation-for="AccountNo" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Iban" class="control-label"></label>
+                                <input asp-for="Iban" class="form-control" />
+                                <span asp-validation-for="Iban" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="BranchCode" class="control-label"></label>
+                                <input asp-for="BranchCode" class="form-control" />
+                                <span asp-validation-for="BranchCode" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="BranchAddress" class="control-label"></label>
+                                <input asp-for="BranchAddress" class="form-control" />
+                                <span asp-validation-for="BranchAddress" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SwiftCode" class="control-label"></label>
+                                <input asp-for="SwiftCode" class="form-control" />
+                                <span asp-validation-for="SwiftCode" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </form>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <div class="float-sm-right">
+                                <p>
+                                    <a asp-action="Index" class="btn btn-block btn-primary">Back to List</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</section>
+<!-- /.content -->
+<!-- Page specific script -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

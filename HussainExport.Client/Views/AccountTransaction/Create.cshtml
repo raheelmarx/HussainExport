@@ -1,0 +1,152 @@
+﻿@model HussainExport.Client.Models.AccountTransactionVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"> @ViewData["Title"]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Type" class="control-label"></label>
+                                @*<input asp-for="Type" class="form-control" />*@
+                                <select asp-for="Type" class="form-control" asp-items="ViewBag.Type">
+                                    <option value="">Please Select</option>
+                                </select>
+                                <span asp-validation-for="Type" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AccountDebitId" class="control-label"></label>
+                                <select asp-for="AccountDebitId" class="form-control" asp-items="ViewBag.AccountDebitId"><option value="">Please Select</option></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AccountCreditId" class="control-label"></label>
+                                <select asp-for="AccountCreditId" class="form-control" asp-items="ViewBag.AccountCreditId"><option value="">Please Select</option></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="VoucherNo" class="control-label"></label>
+                                <input asp-for="VoucherNo" class="form-control" />
+                                <span asp-validation-for="VoucherNo" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="VoucherDate" class="control-label"></label>
+                                <input asp-for="VoucherDate" class="form-control" />
+                                <span asp-validation-for="VoucherDate" class="text-danger"></span>
+                            </div>
+                            @*<div class="form-group">
+            <label asp-for="AccountDebitCode" class="control-label"></label>
+            <input asp-for="AccountDebitCode" class="form-control" />
+            <span asp-validation-for="AccountDebitCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="AccountCreditCode" class="control-label"></label>
+            <input asp-for="AccountCreditCode" class="form-control" />
+            <span asp-validation-for="AccountCreditCode" class="text-danger"></span>
+        </div>*@
+                            <div class="form-group">
+                                <label asp-for="Narration" class="control-label"></label>
+                                <input asp-for="Narration" class="form-control" />
+                                <span asp-validation-for="Narration" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AmountDebit" class="control-label"></label>
+                                <input asp-for="AmountDebit" class="form-control" />
+                                <span asp-validation-for="AmountDebit" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="AmountCredit" class="control-label"></label>
+                                <input asp-for="AmountCredit" class="form-control" />
+                                <span asp-validation-for="AmountCredit" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SaleContractId" class="control-label"></label>
+                                <select asp-for="SaleContractId" class="form-control" asp-items="ViewBag.SaleContractId">
+                                    <option value="">Please Select</option>
+                                </select>
+                                <input asp-for="SaleContractNumber" hidden class="form-control" />
+                            </div>
+                            @*<div class="form-group">
+            <label asp-for="SaleContractNumber" class="control-label"></label>
+            <input asp-for="SaleContractNumber" class="form-control" />
+            <span asp-validation-for="SaleContractNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateAdded" class="control-label"></label>
+            <input asp-for="DateAdded" class="form-control" />
+            <span asp-validation-for="DateAdded" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateUpdated" class="control-label"></label>
+            <input asp-for="DateUpdated" class="form-control" />
+            <span asp-validation-for="DateUpdated" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="IsActive" class="control-label"></label>
+            <input asp-for="IsActive" class="form-control" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>*@
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="float-sm-right">
+                            <p>
+                                <a asp-action="Index" class="btn btn-block btn-primary">Back to List</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<!-- Page specific script -->
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    $("#SaleContractId").change(function () {
+        $("#SaleContractNumber").val($("#SaleContractId").find(":selected").text());
+    });
+  
+</script>

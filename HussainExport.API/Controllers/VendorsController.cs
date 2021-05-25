@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HussainExport.API.Entities;
+using HussainExport.API.Helpers;
 
 namespace HussainExport.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class VendorsController : ControllerBase
     {
         private readonly HEDBContext _context;

@@ -54,9 +54,9 @@
                                         <th>
                                             @Html.Label("Shipment Detail")
                                         </th>
-                                        <th>
+                                        @*<th>
                                             @Html.DisplayNameFor(model => model.Packing)
-                                        </th>
+                                        </th>*@
                                         @*<th>
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
@@ -89,14 +89,14 @@
                                                 @Html.DisplayFor(modelItem => item.TotalAmount)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.DeliveryTime)
+                                                @Html.DisplayFor(modelItem => item.DeliverySchedule)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.ShipmentDetails)
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 @Html.DisplayFor(modelItem => item.Packing)
-                                            </td>
+                                            </td>*@
                                             @*<td>
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
@@ -113,7 +113,7 @@
                                 @Html.DisplayFor(modelItem => item.Currency.CurrencyId)
                             </td>*@
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Customer.CustomerId)
+                                                @Html.DisplayFor(modelItem => item.Customer.CustomerName)
                                             </td>
                                             <td>
                                                 <a asp-action="Edit" asp-route-id="@item.SaleContractId">Edit</a> |
@@ -140,16 +140,22 @@
 <script>
     $(function () {
         $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
             "responsive": true,
-        });
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            "paging": true,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        //$('#example2').DataTable({
+        //    "paging": true,
+        //    "lengthChange": false,
+        //    "searching": true,
+        //    "ordering": true,
+        //    "info": true,
+        //    "autoWidth": false,
+        //    "responsive": true,
+        //});
     });</script>

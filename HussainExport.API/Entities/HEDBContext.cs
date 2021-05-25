@@ -25,11 +25,13 @@ namespace HussainExport.API.Entities
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<Asset> Assets { get; set; }
+        public virtual DbSet<BankInfo> BankInfos { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<FabricPurchase> FabricPurchases { get; set; }
         public virtual DbSet<FabricPurchaseItem> FabricPurchaseItems { get; set; }
+        public virtual DbSet<FactoryOverheadExpense> FactoryOverheadExpenses { get; set; }
         public virtual DbSet<Inventory> Inventories { get; set; }
         public virtual DbSet<MigrationHistory> MigrationHistories { get; set; }
         public virtual DbSet<OwnerEquity> OwnerEquities { get; set; }
@@ -39,6 +41,7 @@ namespace HussainExport.API.Entities
         public virtual DbSet<Receivable> Receivables { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SaleContract> SaleContracts { get; set; }
+        public virtual DbSet<SaleContractExpense> SaleContractExpenses { get; set; }
         public virtual DbSet<SaleContractItem> SaleContractItems { get; set; }
         public virtual DbSet<TblAccount> TblAccounts { get; set; }
         public virtual DbSet<TransactionType> TransactionTypes { get; set; }
@@ -52,6 +55,7 @@ namespace HussainExport.API.Entities
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=DESKTOP-GA7O6QV\\SQLEXPRESS;Database=HEDB;Trusted_Connection=True;");
+               // optionsBuilder.UseSqlServer("Server=.\\MSSQLSERVER2016;Database=HEDB;Trusted_Connection=False;user id=hedbadmin;password=Abcd@1234;");
             }
         }
 
@@ -255,6 +259,27 @@ namespace HussainExport.API.Entities
                     .HasConstraintName("FK_Assets_Account_Transaction");
             });
 
+            modelBuilder.Entity<BankInfo>(entity =>
+            {
+                entity.ToTable("BankInfo");
+
+                entity.Property(e => e.AccountNo).HasMaxLength(500);
+
+                entity.Property(e => e.BankName).HasMaxLength(500);
+
+                entity.Property(e => e.BranchAddress).HasMaxLength(500);
+
+                entity.Property(e => e.BranchCode).HasMaxLength(50);
+
+                entity.Property(e => e.Iban)
+                    .HasMaxLength(500)
+                    .HasColumnName("IBAN");
+
+                entity.Property(e => e.SwiftCode).HasMaxLength(500);
+
+                entity.Property(e => e.Title).HasMaxLength(500);
+            });
+
             modelBuilder.Entity<Company>(entity =>
             {
                 entity.ToTable("Company");
@@ -391,6 +416,30 @@ namespace HussainExport.API.Entities
                     .WithMany(p => p.FabricPurchaseItems)
                     .HasForeignKey(d => d.FabricPurchaseId)
                     .HasConstraintName("FK_FabricPurchaseItem_FabricPurchase");
+            });
+
+            modelBuilder.Entity<FactoryOverheadExpense>(entity =>
+            {
+                entity.HasKey(e => e.Fohid);
+
+                entity.ToTable("FactoryOverheadExpense");
+
+                entity.Property(e => e.Fohid).HasColumnName("FOHId");
+
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(500);
+
+                entity.Property(e => e.PaymentSourceAccountCode).HasMaxLength(150);
+
+                entity.HasOne(d => d.PaymentSourceAccount)
+                    .WithMany(p => p.FactoryOverheadExpenses)
+                    .HasForeignKey(d => d.PaymentSourceAccountId)
+                    .HasConstraintName("FK_FactoryOverheadExpense_tblAccount");
             });
 
             modelBuilder.Entity<Inventory>(entity =>
@@ -646,9 +695,11 @@ namespace HussainExport.API.Entities
 
                 entity.Property(e => e.DateUpdated).HasColumnType("datetime");
 
-                entity.Property(e => e.DeliveryTime).HasMaxLength(500);
+                entity.Property(e => e.DeliverySchedule).HasMaxLength(500);
 
                 entity.Property(e => e.Packing).HasMaxLength(1000);
+
+                entity.Property(e => e.PaymentTerms).HasMaxLength(500);
 
                 entity.Property(e => e.SaleContractNumber)
                     .HasMaxLength(50)
@@ -656,7 +707,16 @@ namespace HussainExport.API.Entities
 
                 entity.Property(e => e.ShipmentDetails).HasMaxLength(1000);
 
+                entity.Property(e => e.Tolerance).HasMaxLength(500);
+
                 entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.TotalFabric).HasMaxLength(250);
+
+                entity.HasOne(d => d.BankDetailsNavigation)
+                    .WithMany(p => p.SaleContracts)
+                    .HasForeignKey(d => d.BankDetails)
+                    .HasConstraintName("FK_SaleContract_SaleContract");
 
                 entity.HasOne(d => d.Currency)
                     .WithMany(p => p.SaleContracts)
@@ -667,6 +727,37 @@ namespace HussainExport.API.Entities
                     .WithMany(p => p.SaleContracts)
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("FK_SaleContract_Customer");
+            });
+
+            modelBuilder.Entity<SaleContractExpense>(entity =>
+            {
+                entity.HasKey(e => e.ExpenseId);
+
+                entity.ToTable("SaleContractExpense");
+
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(500);
+
+                entity.Property(e => e.PaymentSourceAccountCode).HasMaxLength(150);
+
+                entity.Property(e => e.SaleContractNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.PaymentSourceAccount)
+                    .WithMany(p => p.SaleContractExpenses)
+                    .HasForeignKey(d => d.PaymentSourceAccountId)
+                    .HasConstraintName("FK_SaleContractExpense_tblAccount");
+
+                entity.HasOne(d => d.SaleContract)
+                    .WithMany(p => p.SaleContractExpenses)
+                    .HasForeignKey(d => d.SaleContractId)
+                    .HasConstraintName("FK_SaleContractExpense_SaleContract");
             });
 
             modelBuilder.Entity<SaleContractItem>(entity =>

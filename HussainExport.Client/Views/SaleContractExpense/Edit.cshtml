@@ -1,0 +1,139 @@
+﻿@model HussainExport.Client.Models.SaleContractExpenseVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"> @ViewData["Title"]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form asp-action="Edit">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="ExpenseId" />
+                            <div class="form-group">
+                                <label asp-for="SaleContractId" class="control-label"></label>
+                                <select asp-for="SaleContractId" class="form-control" asp-items="ViewBag.SaleContractId"></select>
+                                <span asp-validation-for="SaleContractId" class="text-danger"></span>
+                                <input asp-for="SaleContractNumber" hidden class="form-control" />
+                            </div>
+                            @*<div class="form-group">
+                                <label asp-for="SaleContractNumber" class="control-label"></label>
+                                <input asp-for="SaleContractNumber" class="form-control" />
+                                <span asp-validation-for="SaleContractNumber" class="text-danger"></span>
+                            </div>*@
+                        <div class="form-group">
+                            <label asp-for="PaymentSourceAccountId" class="control-label"></label>
+                            <select asp-for="PaymentSourceAccountId" class="form-control" asp-items="ViewBag.PaymentSourceAccountId"></select>
+                            <input asp-for="PaymentSourceAccountCode" hidden class="form-control" />
+                            <span asp-validation-for="PaymentSourceAccountId" class="text-danger"></span>
+                        </div>
+                            @*<div class="form-group">
+                                <label asp-for="PaymentSourceAccountCode" class="control-label"></label>
+                                <input asp-for="PaymentSourceAccountCode" class="form-control" />
+                                <span asp-validation-for="PaymentSourceAccountCode" class="text-danger"></span>
+                            </div>*@
+                            <div class="form-group">
+                                <label asp-for="Amount" class="control-label"></label>
+                                <input asp-for="Amount" class="form-control" />
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label"></label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="IsActive" class="control-label"></label>
+                                <input asp-for="IsActive" class="form-control" />
+                                <span asp-validation-for="IsActive" class="text-danger"></span>
+                            </div>
+                            @*<div class="form-group">
+                                    <label asp-for="DateAdded" class="control-label"></label>
+                                    <input asp-for="DateAdded" class="form-control" />
+                                    <span asp-validation-for="DateAdded" class="text-danger"></span>
+                                </div>*@
+                            <div class="form-group">
+                                <label asp-for="DateUpdated" class="control-label"></label>
+                                <input asp-for="DateUpdated" class="form-control" />
+                                <span asp-validation-for="DateUpdated" class="text-danger"></span>
+                            </div>
+                            @*<div class="form-group">
+                                    <label asp-for="AddedBy" class="control-label"></label>
+                                    <input asp-for="AddedBy" class="form-control" />
+                                    <span asp-validation-for="AddedBy" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="UpdatedBy" class="control-label"></label>
+                                    <input asp-for="UpdatedBy" class="form-control" />
+                                    <span asp-validation-for="UpdatedBy" class="text-danger"></span>
+                                </div>*@
+                            <div class="form-group">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </form>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <div class="float-sm-right">
+                                <p>
+                                    <a asp-action="Index" class="btn btn-block btn-primary">Back to List</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</section>
+<!-- /.content -->
+<!-- Page specific script -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $("#SaleContractId").change(function () {
+        // alert($("#SaleContractId").find(":selected").text());
+        $("#SaleContractNumber").val($("#SaleContractId").find(":selected").text());
+    });
+
+    $("#PaymentSourceAccountId").change(function () {
+        // alert($("#SaleContractId").find(":selected").text());
+        $("#PaymentSourceAccountCode").val($("#PaymentSourceAccountId").find(":selected").text());
+    });
+</script>

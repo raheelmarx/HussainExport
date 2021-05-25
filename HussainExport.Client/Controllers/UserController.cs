@@ -2,6 +2,7 @@
 using HussainExport.Client.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace HussainExport.Client.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(AuthenticateVM authenticateVM)
         {
-            UserVM UserVM = new UserVM();
+            UserVM userVM = new UserVM();
 
             HttpClient client = _helperAPI.InitializeClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
@@ -46,27 +47,58 @@ namespace HussainExport.Client.Controllers
                 var result = UserVMRes.Content.ReadAsStringAsync().Result;
 
                 //Deserializing the response recieved from web api and storing into the Employee list    
-                UserVM = JsonConvert.DeserializeObject<UserVM>(result);
-                TempData["Token"] = UserVM.Token;
-                HttpContext.Session.SetString("Token", UserVM.Token);
+                userVM = JsonConvert.DeserializeObject<UserVM>(result);
+                TempData["Token"] = userVM.Token;
+                //TempData["Name"] = userVM.FirstName + ' ' + userVM.LastName;
+                //TempData["UserId"] = userVM.Id;
+                HttpContext.Session.SetString("token", userVM.Token);
                 //TempData["User"] = UserVM;
-                //HttpContext.Session.SetString("Name", UserVM.FirstName + ' ' + UserVM.LastName);
+                HttpContext.Session.SetString("Name", userVM.FirstName + ' ' + userVM.LastName);
                 //HttpContext.Session.SetString("Role", UserVM.RoleId.ToString());
                 //HttpContext.Session.SetString("token", UserVM.Token);
-                HttpContext.Session.SetString("User", JsonConvert.SerializeObject(UserVM));
+              
 
             }
+            RoleVM roleVM = new RoleVM();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userVM.Token);
+
+            HttpResponseMessage roleVMRes = await client.GetAsync("api/roles/" + userVM.RoleId);
+
+            if (roleVMRes.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (roleVMRes.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var roleResult = roleVMRes.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the Role list    
+                roleVM = JsonConvert.DeserializeObject<RoleVM>(roleResult);
+                userVM.Role = roleVM;
+                HttpContext.Session.SetString("Role", roleVM.Name);
+                HttpContext.Session.SetString("User", JsonConvert.SerializeObject(userVM));
+            }
+
+            TempData["User"] = JsonConvert.SerializeObject(userVM) ;
             //return View( "~/Views/Home/Index", UserVM);
             //returning the employee list to view    
             //return RedirectToAction("Index", "Home",  UserVM.Token );
-            return RedirectToAction("Index", "Home", new { Token = UserVM.Token });
+            //return RedirectToAction("Index", "Home", new { Token = userVM.Token });
+            return RedirectToAction("Index", "Home");
         }
 
         //[ServiceFilter(typeof(AuthorizeAttribute))]
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("Token");
-            //HttpContext.Session.Remove("Name");
+            TempData.Remove("Token");
+            TempData.Remove("User");
+           HttpContext.Session.Remove("token");
+            HttpContext.Session.Remove("Name");
             //HttpContext.Session.Remove("Role");
             ViewBag.Message = "UserVM logged out successfully!";
             return RedirectToAction("SignIn", "User");
@@ -81,11 +113,12 @@ namespace HussainExport.Client.Controllers
         public async Task<IActionResult> Create()
         {
             HttpClient client = _helperAPI.InitializeClient();
+            List <RoleVM> roleVM = new List<RoleVM>();
 
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
             HttpResponseMessage roleVMsRes = await client.GetAsync("api/Roles");
 
@@ -102,8 +135,8 @@ namespace HussainExport.Client.Controllers
 
 
                 //Deserializing the response recieved from web api and storing into the role list    
-                ViewBag.RoleVM = JsonConvert.DeserializeObject<List<RoleVM>>(result);
-
+                roleVM = JsonConvert.DeserializeObject<List<RoleVM>>(result);
+                ViewData["RoleId"] = new SelectList(roleVM, "Id", "Name");
             }
 
             return View();
@@ -114,11 +147,16 @@ namespace HussainExport.Client.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FirstName,LastName,UserName,Password,RoleId")] UserVM UserVM)
         {
+            HttpClient client = _helperAPI.InitializeClient();
             if (ModelState.IsValid)
             {
-                HttpClient client = _helperAPI.InitializeClient();
+               
                 //UserVM.Id = Guid.NewGuid().ToString();
                 //var UserVMId = this.UserVM.FindFirstValue(ClaimTypes.NameIdentifier);
+                //var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+                //client.DefaultRequestHeaders.Accept.Add(contentType);
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
                 var content = new StringContent(JsonConvert.SerializeObject(UserVM), Encoding.UTF8, "application/json");
 
                 HttpResponseMessage aspNetUserVMsRes = client.PostAsync("api/Users", content).Result;
@@ -127,11 +165,37 @@ namespace HussainExport.Client.Controllers
                     return RedirectToAction("Index");
                 }
             }
+
+            List<RoleVM> roleVM = new List<RoleVM>();
+
+            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Accept.Add(contentType);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
+
+            HttpResponseMessage roleVMsRes = await client.GetAsync("api/Roles");
+
+            if (roleVMsRes.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.Message = "Unauthorized!";
+            }
+
+            //Checking the response is successful or not which is sent using HttpClient    
+            if (roleVMsRes.IsSuccessStatusCode)
+            {
+                //Storing the response details recieved from web api     
+                var result = roleVMsRes.Content.ReadAsStringAsync().Result;
+
+
+                //Deserializing the response recieved from web api and storing into the role list    
+                roleVM = JsonConvert.DeserializeObject<List<RoleVM>>(result);
+                ViewData["RoleId"] = new SelectList(roleVM, "Id", "Name");
+            }
             return View(UserVM);
         }
 
         //[ServiceFilter(typeof(AuthorizeAttribute))]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Index()
         {
             List<UserVM> UserVMs = new List<UserVM>();
 
@@ -142,7 +206,7 @@ namespace HussainExport.Client.Controllers
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("token"));
 
-            HttpResponseMessage UserVMsRes = await client.GetAsync("UserVMs/GetAll");
+            HttpResponseMessage UserVMsRes = await client.GetAsync("api/Users");
 
             if (UserVMsRes.StatusCode == HttpStatusCode.Unauthorized)
             {

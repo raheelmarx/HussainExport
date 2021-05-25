@@ -21,6 +21,7 @@ namespace HussainExport.Client
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseIIS();
                 });
     }
 }

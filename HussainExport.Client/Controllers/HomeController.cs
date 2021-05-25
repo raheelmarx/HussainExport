@@ -1,5 +1,6 @@
 ﻿using HussainExport.Client.Helpers;
 using HussainExport.Client.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,8 +23,20 @@ namespace HussainExport.Client.Controllers
 
         public IActionResult Index()
         {
-            string str = TempData.Peek("Token").ToString();
-            return View();
+            try
+            {
+                string token = TempData.Peek("Token").ToString();
+                if (token == null)
+                {
+                    return RedirectToAction("SignIn", "User");
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("SignIn", "User");
+            }
+           
+                return View();
         }
 
         public IActionResult Privacy()

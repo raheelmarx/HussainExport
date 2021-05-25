@@ -46,27 +46,20 @@
                                         <input asp-for="SaleContractNumber" class="form-control" />
                                         <span asp-validation-for="SaleContractNumber" class="text-danger"></span>
                                     </div>
-                                    <div class="form-group">
-                                        <label asp-for="CustomerId" class="control-label">Customer ID</label>
-                                        <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId"></select>
-                                        <span asp-validation-for="CustomerId" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="TotalAmount" class="control-label">Total Amount</label>
-                                        <input asp-for="TotalAmount" class="form-control" />
-                                        <span asp-validation-for="TotalAmount" class="text-danger"></span>
-                                    </div>
+
+                                    @*<div class="form-group">
+                <label asp-for="TotalAmount" class="control-label"></label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>*@
                                     <div class="form-group">
                                         <label asp-for="CurrencyId" class="control-label">Currency ID</label>
-                                        <select asp-for="CurrencyId" class="form-control" asp-items="ViewBag.CurrencyId"></select>
-                                        <span asp-validation-for="CurrencyId" class="text-danger"></span>
+                                        <select asp-for="CurrencyId" class="form-control select2bs4" style="width: 100%;" asp-items="ViewBag.CurrencyId"></select>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label asp-for="DeliveryTime" class="control-label">Delivery Time</label>
-                                        <input asp-for="DeliveryTime" class="form-control" />
-                                        <span asp-validation-for="DeliveryTime" class="text-danger"></span>
+                                        <label asp-for="Tolerance" class="control-label">Tolerance</label>
+                                        <textarea asp-for="Tolerance" class="form-control"></textarea>
+                                        <span asp-validation-for="Tolerance" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label asp-for="ShipmentDetails" class="control-label">Shipment Details</label>
@@ -74,16 +67,88 @@
                                         <span asp-validation-for="ShipmentDetails" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label asp-for="Packing" class="control-label">Packing</label>
-                                        <input asp-for="Packing" class="form-control" />
-                                        <span asp-validation-for="Packing" class="text-danger"></span>
+                                        <label asp-for="DeliverySchedule" class="control-label">Delivery Schedule</label>
+                                        <input asp-for="DeliverySchedule" class="form-control" />
+                                        <span asp-validation-for="DeliverySchedule" class="text-danger"></span>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CustomerId" class="control-label">Customer ID</label>
+                                        <select asp-for="CustomerId" class="form-control select2bs4" style="width: 100%;" asp-items="ViewBag.CustomerId"></select>
                                     </div>
                                     <div class="form-group">
                                         <label asp-for="Description" class="control-label">Description</label>
-                                        <input asp-for="Description" class="form-control" />
+                                        <textarea asp-for="Description" class="form-control"></textarea>
                                         <span asp-validation-for="Description" class="text-danger"></span>
                                     </div>
+
+
+                                    <div class="form-group">
+                                        <label asp-for="Packing" class="control-label">Packing</label>
+                                        <textarea asp-for="Packing" class="form-control"></textarea>
+                                        <span asp-validation-for="Packing" class="text-danger"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label asp-for="PaymentTerms" class="control-label">Payment Terms</label>
+                                        <input asp-for="PaymentTerms" class="form-control" />
+                                        <span asp-validation-for="PaymentTerms" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="BankDetails" class="control-label">Bank Details</label>
+                                        <select asp-for="BankDetails" class="form-control select2bs4" style="width: 100%;" asp-items="ViewBag.BankId"></select>
+                                    </div>
+
+
                                 </div>
+                                @*<div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="SaleContractNumber" class="control-label"> Sale Contract Number</label>
+                <input asp-for="SaleContractNumber" class="form-control" />
+                <span asp-validation-for="SaleContractNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerId" class="control-label">Customer ID</label>
+                <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId"></select>
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label">Total Amount</label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrencyId" class="control-label">Currency ID</label>
+                <select asp-for="CurrencyId" class="form-control" asp-items="ViewBag.CurrencyId"></select>
+                <span asp-validation-for="CurrencyId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DeliverySchedule" class="control-label">Delivery Time</label>
+                <input asp-for="DeliverySchedule" class="form-control" />
+                <span asp-validation-for="DeliverySchedule" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShipmentDetails" class="control-label">Shipment Details</label>
+                <input asp-for="ShipmentDetails" class="form-control" />
+                <span asp-validation-for="ShipmentDetails" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Packing" class="control-label">Packing</label>
+                <input asp-for="Packing" class="form-control" />
+                <span asp-validation-for="Packing" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>*@
                             </div>
 
 

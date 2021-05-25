@@ -1,0 +1,145 @@
+﻿@model IEnumerable<HussainExport.Client.Models.TblAccountVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"> @ViewData["Title"]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+                        <div class="float-sm-right">
+                            <p>
+                                <a asp-action="Create" class="btn btn-block btn-primary">Create New</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AccountTitle)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AccountCode)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AccountDescription)
+                                    </th>
+                                    @*<th>
+             @Html.DisplayNameFor(model => model.ReceivablesId)
+         </th>
+         <th>
+             @Html.DisplayNameFor(model => model.PayableId)
+         </th>
+        <th>
+             @Html.DisplayNameFor(model => model.DateAdded)
+         </th>
+         <th>
+             @Html.DisplayNameFor(model => model.DateUpdated)
+         </th>
+         <th>
+             @Html.DisplayNameFor(model => model.IsActive)
+         </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AccountTypeId)
+                                    </th>*@
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AccountTitle)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AccountCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AccountDescription)
+                                    </td>
+                                    @*<td>
+             @Html.DisplayFor(modelItem => item.ReceivablesId)
+         </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.PayableId)
+         </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.DateAdded)
+         </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.DateUpdated)
+         </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.IsActive)
+         </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AccountTypeId)
+                                    </td>*@
+                                <td>
+                                    <a asp-action="Ledger" asp-route-id="@item.AccountId">Ledger</a> |
+                                    <a asp-action="Edit" asp-route-id="@item.AccountId">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.AccountId">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.AccountId">Delete</a>
+                                </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<!-- Page specific script -->
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });</script>

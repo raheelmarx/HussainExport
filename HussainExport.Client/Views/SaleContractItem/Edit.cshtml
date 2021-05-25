@@ -105,7 +105,7 @@
             <span asp-validation-for="DateUpdated" class="text-danger"></span>
         </div>*@
                                 <div class="form-group">
-                                    <input type="submit" value="Save" class="btn btn-primary" />
+                                    <input type="submit"  onclick="totalAmount()" value="Save" class="btn btn-primary" />
                                 </div>
 
 </form>
@@ -135,6 +135,9 @@
 }
 <script>
     function totalAmount() {
+        debugger;
         $("#Amount").val(parseFloat($("#Price").val()) * parseFloat($("#Quantity").val()));
+        var amount = $("#Amount").val();
+        debugger;
     }
 </script>

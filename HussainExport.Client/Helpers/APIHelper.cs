@@ -9,7 +9,8 @@ namespace HussainExport.Client.Helpers
 {
     public class APIHelper
     {
-        private string _apiBaseURI = "http://localhost:56735";
+        private string _apiBaseURI = "https://localhost:44326";
+       // private string _apiBaseURI = "https://api.exportrun.com/";
 
         public HttpClient InitializeClient()
         {

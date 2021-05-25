@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -126,7 +128,7 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-       
+
         <!-- Preloader -->
         @*<div class="preloader flex-column justify-content-center align-items-center">
                 <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
@@ -139,12 +141,12 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
+                @*<li class="nav-item d-none d-sm-inline-block">
                     <a href="Home" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Contact</a>
-                </li>
+                </li>*@
             </ul>
 
             <!-- Right navbar links -->
@@ -269,18 +271,39 @@
 
                 @using Microsoft.AspNetCore.Http
                 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-                    <li class="nav-item">
-                        <a class="nav-link">
-                            <i class="fas fa-user">  @HttpContextAccessor.HttpContext.Session.GetString("Name")</i>
-                        </a>
-                    </li>
-                  
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/user/logout" role="button">
-                            <i class="fas fa-sign-out"> Logout</i>
-                        </a>
-                    </li>
-                </ul>
+                @using Newtonsoft.Json;
+                @using Microsoft.AspNetCore.Mvc;
+                @using Microsoft.AspNetCore.Mvc.Rendering;
+
+                @{
+                    string userName = "Guest";
+                    UserVM userVM = new UserVM();
+                    try
+                    {
+                        //var userString = TempData.Peek("User").ToString();
+
+                        var userString = HttpContextAccessor.HttpContext.Session.GetString("User");
+                        userVM = JsonConvert.DeserializeObject<UserVM>(userString);
+                        userName = userVM.FirstName + ' ' + userVM.LastName;
+                    }
+                    catch (Exception ex)
+                    {
+                        userName = "Guest";
+                        //saleContractVM.AddedBy = userVM.Id;
+                    }
+                }
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="fas fa-user">  @userName</i>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="~/user/logout" role="button">
+                        <i class="fas fa-sign-out"> Logout</i>
+                    </a>
+                </li>
+            </ul>
         </nav>
         <!-- /.navbar -->
         <!-- Main Sidebar Container -->
@@ -318,71 +341,178 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li class="nav-item">
-                            <a href="~/salecontract" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Sale Conrtact
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="~/salecontractitem" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Sale Conrtact Items
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="~/customer" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Customers
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
+                        @if (userVM.Id != 0) { 
+                        if (userVM.Role.Name == "Administrator" || userVM.Role.Name == "Accountant")
+                        {
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Sale Contract
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/customer" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Customers</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/bankinfo" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Bank Details</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/salecontract" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Sale Contract</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/salecontractitem" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Sale Conrtact Items</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Expenses
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/FactoryOverheadExpense" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Factory Overhead</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/SaleContractExpense" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Sale Contract Expense</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Accounting
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/account" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Chart of Accounts</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/AccountTransaction" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>
+                                                General Journal
+                                            </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Settings
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="~/currency" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Currency</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/role" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Role</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/unit" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Units</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="~/user" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Users</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="~/fabricpurchase" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Fabric Purchase Contract
+                                        @*<span class="right badge badge-danger">New</span>*@
+                                    </p>
+                                </a>
+                            </li>
+                            }}
+                        else
+                        {
+                            Context.Response.Redirect(Url.Content("~/User/SignIn"));
+                        }
+
+                        <!--<li class="nav-item">
+    <a href="~/salecontract" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+            Sale Conrtact-->
+                        @*<span class="right badge badge-danger">New</span>*@
+                        <!--</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="~/salecontractitem" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+                Sale Conrtact Items-->
+                        @*<span class="right badge badge-danger">New</span>*@
+                        <!--</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="~/customer" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+                Customers-->
+                        @*<span class="right badge badge-danger">New</span>*@
+                        <!--</p>
+        </a>
+    </li>-->
                         <!-- Add icons to the links using the .nav-icon class
     with font-awesome or any other icon font library -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Settings
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="~/currency" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Currency</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="~/role" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Role</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="~/unit" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Units</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="~/user/getall" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Users</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
                         @*<li class="nav-item">
              <a href="#" class="nav-link">
                  <i class="nav-icon fas fa-copy"></i>

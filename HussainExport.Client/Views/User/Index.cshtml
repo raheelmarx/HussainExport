@@ -24,14 +24,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
+            </th>*@
+            @*<th>
                 @Html.DisplayNameFor(model => model.Token)
-            </th>
+            </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.RoleId)
+                @Html.DisplayNameFor(model => model.Role.Name)
             </th>
             <th></th>
         </tr>
@@ -51,14 +51,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
+            </td>*@
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Token)
-            </td>
+            </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.RoleId)
+                @Html.DisplayFor(modelItem => item.Role.Name)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

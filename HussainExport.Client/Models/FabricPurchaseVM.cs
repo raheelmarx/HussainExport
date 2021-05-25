@@ -8,11 +8,16 @@ namespace HussainExport.Client.Models
 {
     public class FabricPurchaseVM
     {
+        public FabricPurchaseVM()
+        {
+            FabricPurchaseItems = new HashSet<FabricPurchaseItemVM>();
+        }
         [Key]
+
         public long FabricPurchaseId { get; set; }
         public long? SaleContractId { get; set; }
         public string SaleContractNumber { get; set; }
-        public string Weaver { get; set; }
+        public long? Weaver { get; set; }
         public string ContQuality { get; set; }
         public string Gstquality { get; set; }
         public bool? IsConversionContract { get; set; }
@@ -28,6 +33,6 @@ namespace HussainExport.Client.Models
         public DateTime? DateUpdated { get; set; }
 
         public virtual SaleContractVM SaleContract { get; set; }
-        public virtual ICollection<FabricPurchaseItemVM> FabricPurchaseItem { get; set; }
+        public virtual ICollection<FabricPurchaseItemVM> FabricPurchaseItems { get; set; }
     }
 }

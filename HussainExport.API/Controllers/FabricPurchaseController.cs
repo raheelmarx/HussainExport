@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HussainExport.API.Entities;
+using HussainExport.API.Helpers;
 
 namespace HussainExport.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FabricPurchaseController : ControllerBase
     {
         private readonly HEDBContext _context;
@@ -65,67 +67,25 @@ namespace HussainExport.API.Controllers
                     if (tblAccountPayableExist != null)
                     {
                         var tblAccountSaleContractExist = _context.TblAccounts.Where(x => x.AccountCode == fabricPurchase.SaleContractNumber).FirstOrDefault();
+                        // Edit Double Entry of Payable (CR) and Sale Contract Account (DR)
 
-                        // Add Double Entry of PAYABLE (CR) and Sale Contract Account (DR)
-                        AccountTransaction accountTransaction = new AccountTransaction()
-                        {
-                            Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
-                            AccountDebitId = tblAccountSaleContractExist.AccountId,
-                            AccountCreditId = tblAccountPayableExist.AccountId,
-                            AccountDebitCode = tblAccountSaleContractExist.AccountCode,
-                            AccountCreditCode = tblAccountPayableExist.AccountCode,
-                            Narration = "Fabric Purchase Contract Creation",
-                            AmountDebit = fabricPurchase.QuantityInMeters * fabricPurchase.PerMeterRate,
-                            AmountCredit = fabricPurchase.QuantityInMeters * fabricPurchase.PerMeterRate,
-                            SaleContractNumber = fabricPurchase.SaleContractNumber,
-                            DateAdded = DateTime.Now,
-                            IsActive = true
-                        };
-                        _context.AccountTransactions.Add(accountTransaction);
-                        try
-                        {
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (Exception ex)
-                        {
-                            var x = 0;
-                        }
-                    }
-                    else
-                    {
-                        //Add Payable Account
-                        TblAccount tblAccountPayable = new TblAccount()
-                        {
-                            AccountCode = payableExist.PayableId.ToString(),
-                            AccountDescription = fabricPurchase.SaleContractNumber,
-                            AccountTitle = payableExist.PayableName,
-                            AccountTypeId = _context.AccountTypes.Where(x => x.AccountTypeName == "Payable").Select(x => x.AccountTypeId).FirstOrDefault(),
-                            DateAdded = DateTime.Now,
-                            IsActive = true,
-                            ReceivablesId = payableExist.PayableId
-                        };
-                        _context.TblAccounts.Add(tblAccountPayable);
-                        await _context.SaveChangesAsync();
-
-                        var tblAccountSaleContractExist = _context.TblAccounts.Where(x => x.AccountCode == fabricPurchase.SaleContractNumber).FirstOrDefault();
+                        var accountTransactionExist = _context.AccountTransactions.Where(x => x.AccountCreditCode == tblAccountPayableExist.AccountCode && x.AccountCreditId == tblAccountPayableExist.AccountId && x.Type==  _context.TransactionTypes.Where(x => x.TransactionTypeName == "FabricPurchase").Select(x => x.TransactionTypeId).FirstOrDefault()).FirstOrDefault();
 
 
-                        // Add Double Entry of PAYABLE (CR) and Sale Contract Account (DR)
-                        AccountTransaction accountTransaction = new AccountTransaction()
-                        {
-                            Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
-                            AccountDebitId = tblAccountSaleContractExist.AccountId,
-                            AccountCreditId = tblAccountPayable.AccountId,
-                            AccountDebitCode = tblAccountSaleContractExist.AccountCode,
-                            AccountCreditCode = tblAccountPayable.AccountCode,
-                            Narration = "Fabric Purchase Contract Creation",
-                            AmountDebit = fabricPurchase.QuantityInMeters * fabricPurchase.PerMeterRate,
-                            AmountCredit = fabricPurchase.QuantityInMeters * fabricPurchase.PerMeterRate,
-                            SaleContractNumber = fabricPurchase.SaleContractNumber,
-                            DateAdded = DateTime.Now,
-                            IsActive = true
-                        };
-                        _context.AccountTransactions.Add(accountTransaction);
+                        accountTransactionExist.Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "FabricPurchase").Select(x => x.TransactionTypeId).FirstOrDefault();
+                            //accountTransactionExist.AccountDebitId = tblAccountSaleContractExist.AccountId;
+                            //accountTransactionExist.AccountCreditId = tblAccountPayableExist.AccountId;
+                            //accountTransactionExist.AccountDebitCode = tblAccountSaleContractExist.AccountCode;
+                            //accountTransactionExist.AccountCreditCode = tblAccountPayableExist.AccountCode;
+                            accountTransactionExist.Narration = "Fabric Purchase Contract Update";
+                            accountTransactionExist.AmountDebit = fabricPurchase.QuantityInMeters * fabricPurchase.PerMeterRate;
+                            accountTransactionExist.AmountCredit = fabricPurchase.QuantityInMeters * fabricPurchase.PerMeterRate;
+                            //accountTransactionExist.SaleContractNumber = fabricPurchase.SaleContractNumber;
+                            accountTransactionExist.DateUpdated = DateTime.Now;
+                            accountTransactionExist.IsActive = true;
+
+
+                    _context.Entry(accountTransactionExist).State = EntityState.Modified;
                         try
                         {
                             await _context.SaveChangesAsync();
@@ -176,7 +136,7 @@ namespace HussainExport.API.Controllers
                         // Add Double Entry of PAYABLE (CR) and Sale Contract Account (DR)
                         AccountTransaction accountTransaction = new AccountTransaction()
                         {
-                            Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
+                            Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "FabricPurchase").Select(x => x.TransactionTypeId).FirstOrDefault(),
                             AccountDebitId = tblAccountSaleContractExist.AccountId,
                             AccountCreditId = tblAccountPayableExist.AccountId,
                             AccountDebitCode = tblAccountSaleContractExist.AccountCode,
@@ -212,15 +172,22 @@ namespace HussainExport.API.Controllers
                             ReceivablesId = payableExist.PayableId
                         };
                         _context.TblAccounts.Add(tblAccountPayable);
+                    try
+                    {
                         await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        var x = 0;
+                    }
 
-                        var tblAccountSaleContractExist = _context.TblAccounts.Where(x => x.AccountCode == fabricPurchase.SaleContractNumber).FirstOrDefault();
+                    var tblAccountSaleContractExist = _context.TblAccounts.Where(x => x.AccountCode == fabricPurchase.SaleContractNumber).FirstOrDefault();
 
 
                         // Add Double Entry of PAYABLE (CR) and Sale Contract Account (DR)
                         AccountTransaction accountTransaction = new AccountTransaction()
                         {
-                            Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "SalesContract").Select(x => x.TransactionTypeId).FirstOrDefault(),
+                            Type = _context.TransactionTypes.Where(x => x.TransactionTypeName == "FabricPurchase").Select(x => x.TransactionTypeId).FirstOrDefault(),
                             AccountDebitId = tblAccountSaleContractExist.AccountId,
                             AccountCreditId = tblAccountPayable.AccountId,
                             AccountDebitCode = tblAccountSaleContractExist.AccountCode,

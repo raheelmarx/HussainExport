@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HussainExport.API.Entities;
+using HussainExport.API.Helpers;
 
 namespace HussainExport.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RolesController : ControllerBase
     {
         private readonly HEDBContext _context;
@@ -24,7 +26,8 @@ namespace HussainExport.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Role>>> GetRole()
         {
-            return await _context.Roles.ToListAsync();
+            var roles = await _context.Roles.ToListAsync();
+            return roles;
         }
 
         // GET: api/Roles/5

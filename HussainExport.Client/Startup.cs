@@ -13,6 +13,7 @@ using HussainExport.Client.Data;
 using Microsoft.AspNetCore.Http;
 using HussainExport.Client.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace HussainExport.Client
 {
@@ -30,15 +31,15 @@ namespace HussainExport.Client
         {
             services.AddMvc();
             services.AddMemoryCache();
-            services.AddSession();
+            //services.AddSession();
             //services.AddDistributedMemoryCache();
 
-            //services.AddSession(options =>
-            //{
-            //    options.IdleTimeout = TimeSpan.FromSeconds(1000);
-            //    options.Cookie.HttpOnly = true;
-            //    options.Cookie.IsEssential = true;
-            //});
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(24);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddControllersWithViews();
 
             services.AddDbContext<HEClientContext>(options =>
@@ -50,7 +51,7 @@ namespace HussainExport.Client
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "jwt";
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddCookie(options =>
             {
